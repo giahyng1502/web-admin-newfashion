@@ -2,19 +2,21 @@ import { useState } from "react";
 import {Sidebar, Menu, MenuItem, SubMenu} from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import {Box, colors, IconButton, Typography, useTheme} from "@mui/material";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+// import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
+// import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { tokens } from "../theme";
+import {CloseOutlined} from "@mui/icons-material";
 
 const SidebarItem = ({ title, to, icon, selected, setSelected, children, colors }) => {
     if (children && children.length > 0) {
@@ -76,31 +78,25 @@ const MySidebar = () => {
                 }}
             >
                 <MenuItem
-                    icon={<MenuOutlinedIcon />}
+                    icon={isCollapsed ? <MenuOutlinedIcon/> : <CloseOutlinedIcon />}
                     onClick={() => setIsCollapsed(!isCollapsed)}
                 >
-                    <Typography variant="h6">Menu</Typography>
                 </MenuItem>
 
                 <SidebarItem
                     colors={colors}
-                    title="Dashboard"
+                    title="Thống Kê"
                     to="/"
                     icon={<HomeOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
-                    children={[
-                        {
-                            title: "Sub Dashboard",
-                            to: "/sub-dashboard",
-                            icon: <PeopleOutlinedIcon />,
-                        }
-                    ]}
                 />
 
-                <SidebarItem colors={colors} title="product" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="order" to="/orders" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="team" to="/team" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Sản Phẩm" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Thể Loại Sản Phẩm" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Quản Lý Đặt Hàng" to="/orders" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Quản Lý Người Dùng" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Tin Tức" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
             </Menu>
         </Sidebar>
     );
