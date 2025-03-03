@@ -9,7 +9,22 @@ import {createUser, updateUser} from "../redux/reducer/userReducer";
 import { useNotification } from "../snackbar/NotificationContext";
 import {utilUserUpdate} from "../screen/dashboard/team";
 
-const columns = [
+import { MenuItem, Select } from "@mui/material";
+
+export const handleRoleChange = async (userId, newRole, dispatch, showNotification) => {
+    try {
+        const res = await axios.put(`/users/adminUpdateUser/${userId}`, { role: newRole });
+
+        if (res.status === 200) {
+            dispatch(updateUser({ _id: userId, role: newRole }));
+            showNotification("Cập nhật quyền thành công", "success");
+        }
+    } catch (error) {
+        showNotification("Lỗi khi cập nhật quyền", "error");
+    }
+};
+
+const getColumns = (dispatch, showNotification) => [
     { field: "_id", headerName: "ID", width: 80 },
     { field: "name", headerName: "Họ và tên", width: 180, editable: true },
     { field: "email", headerName: "Email", width: 200 },
@@ -18,7 +33,23 @@ const columns = [
     { field: "address", headerName: "Địa chỉ", width: 200 },
     { field: "point", headerName: "Điểm thưởng", width: 100, editable: true },
     { field: "balance", headerName: "Số dư", width: 100, editable: true },
-    { field: "role", headerName: "Chức năng", width: 100, editable: true },
+    {
+        field: "role",
+        headerName: "Chức năng",
+        width: 150,
+        renderCell: (params) => (
+            <Select
+                value={params.value}
+                onChange={(event) => handleRoleChange(params.row._id, event.target.value, dispatch, showNotification)}
+                sx={{ width: "100%"}}
+                variant="filled"
+            >
+                <MenuItem value={0}>Người dùng</MenuItem>
+                <MenuItem value={1}>Nhân viên</MenuItem>
+                <MenuItem value={2}>Admin</MenuItem>
+            </Select>
+        )
+    }
 ];
 
 export default function DataTable({
@@ -35,41 +66,33 @@ export default function DataTable({
     // Xử lý cập nhật dữ liệu trực tiếp trong bảng
     const handleProcessRowUpdate = async (newRow, oldRow) => {
         try {
-            // Lấy danh sách các trường đã thay đổi
             const changedFields = Object.keys(newRow).filter(
                 (key) => newRow[key] !== oldRow[key]
             );
 
             if (changedFields.length === 0) {
-                console.log("Không có thay đổi nào.");
-                showNotification("Không có dự liệu nào thay đổi", "error");
-                return oldRow; // Không cập nhật nếu không có thay đổi
+                showNotification("Không có dữ liệu nào thay đổi", "error");
+                return oldRow;
             }
 
-            // Chỉ gửi lên những trường đã thay đổi
             const updatedData = changedFields.reduce((acc, key) => {
                 acc[key] = newRow[key];
                 return acc;
             }, {});
 
-            console.log("Dữ liệu gửi lên:", updatedData);
-
             const res = await axios.put(`/users/adminUpdateUser/${newRow._id}`, updatedData);
 
             if (res.status === 200) {
-                const data = utilUserUpdate(res.data.user )
-                console.log(data)
-                dispatch(updateUser(data)); // Cập nhật Redux store
-                showNotification("Cập nhập người dùng thành công", "success");
-                return  data // Trả về dữ liệu mới để cập nhật UI
-
+                const data = utilUserUpdate(res.data.user);
+                dispatch(updateUser(data));
+                showNotification("Cập nhật người dùng thành công", "success");
+                return data;
             }
         } catch (error) {
-            console.error("Lỗi khi cập nhật dữ liệu:", error);
-            showNotification("Lỗi dữ liệu khi cập nhập người dùng", "error");
+            showNotification("Lỗi khi cập nhật người dùng", "error");
         }
 
-        return oldRow; // Nếu lỗi, giữ nguyên dữ liệu cũ
+        return oldRow;
     };
 
     return (
@@ -89,20 +112,10 @@ export default function DataTable({
             }}
         >
             <Box display="flex" justifyContent="space-between" width="100%">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleOpenAddUser} // Định nghĩa onClick
-                    sx={{ marginBottom: 2 }}
-                >
+                <Button variant="contained" color="primary" onClick={handleOpenAddUser} sx={{ marginBottom: 2 }}>
                     Thêm Người Dùng
                 </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => exportToExcel(rows)}
-                    sx={{ marginBottom: 2 }}
-                >
+                <Button variant="contained" color="primary" onClick={() => exportToExcel(rows)} sx={{ marginBottom: 2 }}>
                     Xuất Excel
                 </Button>
             </Box>
@@ -118,7 +131,7 @@ export default function DataTable({
                     setPage(model.page);
                     setPageSize(model.pageSize);
                 }}
-                columns={columns}
+                columns={getColumns(dispatch, showNotification)}
                 processRowUpdate={handleProcessRowUpdate}
                 sx={{
                     width: "100%",

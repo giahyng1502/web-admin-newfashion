@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {Box, Button, useTheme} from "@mui/material";
+import {Box, useTheme} from "@mui/material";
 import DataTable from "../../components/user-table";
 import axios from "../../apis/axios";
 import {useDispatch, useSelector,} from "react-redux";
-import {createUser, getAll} from "../../redux/reducer/userReducer";
-import AddUser from "../../add-user";
+import { getAll} from "../../redux/reducer/userReducer";
+import AddUser from "../../dialogs/add-user";
 import {tokens} from "../../theme";
 import {useNotification} from "../../snackbar/NotificationContext";
 const utilUser = (data)=> {

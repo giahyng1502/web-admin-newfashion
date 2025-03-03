@@ -3,7 +3,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import Product from "./screen/dashboard/product";
 import Team from "./screen/dashboard/team";
-import Category from "./screen/dashboard/category";
+import Category from "./screen/category/category";
 import Order from "./screen/dashboard/order";
 import Newfeed from "./screen/dashboard/newfeed";
 import MySidebar from "./global/side-bar";

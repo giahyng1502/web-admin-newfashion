@@ -93,7 +93,7 @@ const MySidebar = () => {
                 />
 
                 <SidebarItem colors={colors} title="Sản Phẩm" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="Thể Loại Sản Phẩm" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem colors={colors} title="Thể Loại Sản Phẩm" to="/category" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
                 <SidebarItem colors={colors} title="Quản Lý Đặt Hàng" to="/orders" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
                 <SidebarItem colors={colors} title="Quản Lý Người Dùng" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
                 <SidebarItem colors={colors} title="Tin Tức" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
