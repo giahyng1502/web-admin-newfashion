@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Product from "./screen/dashboard/product";
 import Team from "./screen/dashboard/team";
 import Category from "./screen/category/category";
-import Order from "./screen/dashboard/order";
+import Order from "./screen/Order/order";
 import Newfeed from "./screen/dashboard/newfeed";
 import MySidebar from "./global/side-bar";
 import TopBar from "./global/top-bar";
@@ -35,7 +35,7 @@ function App() {
                                             <Route path="/product" element={<Product />} />
                                             <Route path="/user" element={<Team />} />
                                             <Route path="/category" element={<Category />} />
-                                            <Route path="/order" element={<Order />} />
+                                            <Route path="/orders" element={<Order />} />
                                             <Route path="/newfeed" element={<Newfeed />} />
                                         </Routes>
                                     </main>

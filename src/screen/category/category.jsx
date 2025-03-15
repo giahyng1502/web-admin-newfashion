@@ -16,7 +16,6 @@ function Category() {
             dispatch(getAll(data))
         });
     }, [dispatch]);
-    console.log(categories)
     return (
         <CategoryList colors={colors} categories={categories} dispatch={dispatch}/>
     );
