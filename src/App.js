@@ -1,7 +1,7 @@
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
-import Product from "./screen/dashboard/product";
+import Product from "./screen/product/product";
 import Team from "./screen/dashboard/team";
 import Category from "./screen/category/category";
 import Order from "./screen/Order/order";
@@ -12,6 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import Login from "./screen/login";
 import {NotificationProvider} from "./snackbar/NotificationContext";
 import Unauthorized from "./screen/unauthorized-page";
+import AddProduct from "./screen/product/add-product";
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -33,6 +34,7 @@ function App() {
                                         <TopBar />
                                         <Routes>
                                             <Route path="/product" element={<Product />} />
+                                            <Route path="/product/add" element={<AddProduct />} />
                                             <Route path="/user" element={<Team />} />
                                             <Route path="/category" element={<Category />} />
                                             <Route path="/orders" element={<Order />} />

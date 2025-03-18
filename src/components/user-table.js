@@ -28,7 +28,6 @@ const getColumns = (dispatch, showNotification) => [
     { field: "_id", headerName: "ID", width: 80 },
     { field: "name", headerName: "Họ và tên", width: 180, editable: true },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "password", headerName: "Mật khẩu", width: 200, editable: true },
     { field: "phoneNumber", headerName: "Số điện thoại", width: 100 },
     { field: "address", headerName: "Địa chỉ", width: 200 },
     { field: "point", headerName: "Điểm thưởng", width: 100, editable: true },

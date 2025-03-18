@@ -1,37 +1,34 @@
 import { useState } from "react";
-import {Sidebar, Menu, MenuItem, SubMenu} from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
-import {Box, colors, IconButton, Typography, useTheme} from "@mui/material";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Link } from "react-router-dom";
+import { Typography, useTheme } from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-// import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-// import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-// import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-// import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-// import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import { tokens } from "../theme";
-import {CloseOutlined} from "@mui/icons-material";
+import { tokens } from "../theme"; // Nếu bạn có theme
 
 const SidebarItem = ({ title, to, icon, selected, setSelected, children, colors }) => {
     if (children && children.length > 0) {
         return (
-            <SubMenu label={title} icon={icon} style={{ color: colors.grey[100] }}>
-                {children.map((child) => (
+            <SubMenu
+                label={title}
+                icon={icon}
+                style={{ color: colors.grey[100],backgroundColor: colors.primary[400] }}
+            >
+                {children.map((child, index) => (
                     <MenuItem
-                        active={child.selected === title}
+                        key={index}
+                        active={selected === child.title}
                         style={{
-                            color: selected === child.title ? "#ffffff" : colors.grey[100],
+                            color: colors.grey[100],
                             backgroundColor: selected === child.title ? colors.primary[600] : colors.primary[400],
                         }}
                         onClick={() => setSelected(child.title)}
                         icon={child.icon}
-                        component={<Link to={to}>{child.title}</Link>}
+                        component={<Link to={child.to} />}
                     >
                         <Typography>{child.title}</Typography>
                     </MenuItem>
@@ -39,16 +36,17 @@ const SidebarItem = ({ title, to, icon, selected, setSelected, children, colors 
             </SubMenu>
         );
     }
+
     return (
         <MenuItem
             active={selected === title}
             style={{
-                color: selected === title ? "#ffffff" : colors.grey[100],
-                backgroundColor: selected === title ? colors.primary[600] : "transparent",
+                color: colors.grey[100],
+                backgroundColor: selected === title ? colors.primary[500] : "transparent",
             }}
             onClick={() => setSelected(title)}
             icon={icon}
-            component={<Link to={to}>{title}</Link>}
+            component={<Link to={to} />}
         >
             <Typography>{title}</Typography>
         </MenuItem>
@@ -78,7 +76,7 @@ const MySidebar = () => {
                 }}
             >
                 <MenuItem
-                    icon={isCollapsed ? <MenuOutlinedIcon/> : <CloseOutlinedIcon />}
+                    icon={isCollapsed ? <MenuOutlinedIcon /> : <CloseOutlinedIcon />}
                     onClick={() => setIsCollapsed(!isCollapsed)}
                 >
                 </MenuItem>
@@ -92,11 +90,51 @@ const MySidebar = () => {
                     setSelected={setSelected}
                 />
 
-                <SidebarItem colors={colors} title="Sản Phẩm" to="/product" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="Thể Loại Sản Phẩm" to="/category" icon={<PeopleOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="Quản Lý Đặt Hàng" to="/orders" icon={<ContactsOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="Quản Lý Người Dùng" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
-                <SidebarItem colors={colors} title="Tin Tức" to="/user" icon={<ReceiptOutlinedIcon />} selected={selected} setSelected={setSelected} />
+                <SidebarItem
+                    colors={colors}
+                    title="Sản Phẩm"
+                    to="/product"
+                    icon={<PeopleOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                    children={[
+                        { title: "Danh Sách Sản Phẩm", to: "/product", icon: <PeopleOutlinedIcon /> },
+                        { title: "Thêm Sản Phẩm", to: "/product/add", icon: <PeopleOutlinedIcon /> },
+                    ]}
+                />
+
+                <SidebarItem
+                    colors={colors}
+                    title="Thể Loại Sản Phẩm"
+                    to="/category"
+                    icon={<PeopleOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+                <SidebarItem
+                    colors={colors}
+                    title="Quản Lý Đặt Hàng"
+                    to="/orders"
+                    icon={<ContactsOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+                <SidebarItem
+                    colors={colors}
+                    title="Quản Lý Người Dùng"
+                    to="/user"
+                    icon={<ReceiptOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+                <SidebarItem
+                    colors={colors}
+                    title="Tin Tức"
+                    to="/news"
+                    icon={<ReceiptOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
             </Menu>
         </Sidebar>
     );
