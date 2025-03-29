@@ -1,0 +1,14 @@
+.swiped {
+  transform: translateX(-100px);
+}
+
+.swiping-back {
+  transform: translateX(0px);
+}
+
+.delete-btn,
+.edit-btn {
+  min-width: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+}
