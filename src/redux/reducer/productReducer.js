@@ -25,25 +25,34 @@ const productReducer = createSlice({
     }
 })
 
-export const getProduct = async (dispatch,page,pageSize) => {
+export const getProduct = async (dispatch, page, pageSize, search = "", minPrice = "", maxPrice = "", sortField = "createdAt", sortOrder = "desc") => {
     try {
-        const res = await axios.get('/getAllProducts',{
+        const res = await axios.get("/search", {
             params: {
-                page: page+1,
+                page: page + 1,
                 limit: pageSize,
-            }
+                search,  // Tìm kiếm theo tên hoặc ID
+                minPrice,
+                maxPrice,
+                sortField, // Trường cần sắp xếp (giá, số lượng bán, ngày tạo,...)
+                sortOrder, // Thứ tự tăng/giảm
+            },
         });
-        if (res && res.data.data.length > 0) {
-            let data = {};
-            data.products= productData(res.data.data);
-            data.totalProducts = res.data.totalProducts;
-            console.log(data)
-            dispatch(getAllProduct(data))
-        }
 
-    }catch(error){
-        console.log(error)
+        if (res && res.data.data.length > 0) {
+            let data = {
+                products: productData(res.data.data),
+                totalProducts: res.data.total,
+            };
+            console.log("Fetched data:", data);
+            dispatch(getAllProduct(data));
+        } else {
+            dispatch(getAllProduct({ products: [], totalProducts: 0 }));
+        }
+    } catch (error) {
+        console.error("Lỗi khi fetch sản phẩm:", error);
     }
-}
+};
+
 export const {getAllProduct, addProduct,updateProduct} = productReducer.actions;
 export default productReducer.reducer

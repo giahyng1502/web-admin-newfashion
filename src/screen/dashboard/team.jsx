@@ -45,7 +45,7 @@ function Team() {
     const colors = tokens(theme.palette.mode);
 
     useEffect(() => {
-        const fetchOrders = async () => {
+        const fetchUsers = async () => {
             setLoading(true);
             const sortField = sortModel.length > 0 ? sortModel[0].field : "createdAt";
             const sortOrder = sortModel.length > 0 ? sortModel[0].sort : "desc";
@@ -54,7 +54,7 @@ function Team() {
             setLoading(false);
         };
 
-        fetchOrders();
+        fetchUsers();
     }, [page, pageSize, sortModel, search, dispatch]);
 
 

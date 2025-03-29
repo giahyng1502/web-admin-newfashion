@@ -250,7 +250,8 @@ export default function TableOrder({
                     }}
                     columns={getColumns(dispatch, showNotification, handleOrderDetail)}
                     sx={{
-                        width: "100%",
+                        width: "100%" ,
+                        '& .MuiDataGrid-columnSeparator': { display: 'none' } ,
                         "& .MuiDataGrid-root": { border: "2px solid #1976d2" },
                         "& .MuiDataGrid-columnHeaders": { backgroundColor: "#1976d2", fontWeight: "bold", fontSize: "16px" },
                         "& .MuiDataGrid-cell": { whiteSpace: "normal", wordWrap: "break-word", lineHeight: "1.2em", alignContent: "center", display: "block" }

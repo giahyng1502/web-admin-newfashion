@@ -1,4 +1,4 @@
-import {Box, Button, IconButton, Paper, Typography, useTheme} from "@mui/material";
+import {Box, Button, IconButton, InputBase, Paper, Typography, useTheme} from "@mui/material";
 import {tokens} from "../../theme";
 import {useDispatch} from "react-redux";
 import {useNotification} from "../../snackbar/NotificationContext";
@@ -11,11 +11,13 @@ import {updateProduct} from "../../redux/reducer/productReducer";
 import {exportToExcel} from "../../utils/export-excel";
 import axios from "../../apis/axios";
 import AddSaleProduct from "../../dialogs/add-saleProduct";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function ProductTable({
                                          isLoading, rows, setRows,
                                          pageSize, setPageSize,
-                                         page, setPage,
+                                         page, setPage,setSearch,
+                                         setSortModel,sortModel,
                                          rowCount, handleOpenAddUser
                                      }) {
     const theme = useTheme();
@@ -25,6 +27,7 @@ export default function ProductTable({
     const [isShowProduct, setIsShowProduct] = useState(false);
     const [isSaleProductDialog, setIsSaleProductDialog] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [value, setValue] = useState("")
     const [saleProductSelected, setSaleProductSelected] = useState({
 
     });
@@ -120,14 +123,14 @@ export default function ProductTable({
                 </Box>
             )
         },
-        { field: "price", headerName: "Giá bán ra", width: 100, editable: true, align: "center", headerAlign: "center",
+        { field: "price", headerName: "Giá bán ra", width: 130, editable: true, align: "center", headerAlign: "center",
             renderCell: (params) => (
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
                     <Typography>{utilVietnamDong(params.value)}</Typography>
                 </Box>
             )
         },
-        { field: "stock", headerName: "Hàng tồn kho", width: 100, editable: true, align: "center", headerAlign: "center",
+        { field: "stock", headerName: "Hàng tồn kho", width: 130, editable: true, align: "center", headerAlign: "center",
             renderCell: (params) => (
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
                     <Typography>{params.value}</Typography>
@@ -141,7 +144,7 @@ export default function ProductTable({
                 </Box>
             )
         },
-        { field: "rateCount", headerName: "Đánh giá", width: 100, align: "center", headerAlign: "center",
+        { field: "rating", headerName: "Đánh giá", width: 100, align: "center", headerAlign: "center",
             renderCell: (params) => (
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
                     <Typography>{params.value}</Typography>
@@ -149,7 +152,7 @@ export default function ProductTable({
             )
         },
         {
-            field: "action",
+            field: "createdAt",
             headerName: "Hành động",
             width: 150,
             align: "center",
@@ -190,18 +193,47 @@ export default function ProductTable({
                 }}
             >
                 <Box display="flex" justifyContent="space-between" width="100%">
-                    <Button variant="contained" color="primary" onClick={handleOpenAddUser} sx={{ marginBottom: 2 }}>
-                        Thêm sản phẩm
-                    </Button>
-                    <Button variant="contained" color="primary" onClick={() => exportToExcel(rows)} sx={{ marginBottom: 2 }}>
-                        Xuất Excel
-                    </Button>
+                    <Box display="flex" borderRadius="8px" p={1} mb={2} backgroundColor={colors.primary[500]}>
+                        <InputBase
+                            sx={{ ml: 2, flex: 1 }}
+                            placeholder="Search..."
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    setSearch(value); // Thực hiện tìm kiếm khi nhấn Enter
+                                }
+                            }}
+                        />
+                        <IconButton sx={{ p: 1 }} onClick={() => setSearch(value)}>
+                            <SearchIcon />
+                        </IconButton>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" color="primary" onClick={handleOpenAddUser} sx={{ marginBottom: 2,marginRight : 2 }}>
+                            Thêm sản phẩm
+                        </Button>
+                        <Button variant="contained" color="primary" onClick={() => exportToExcel(rows)} sx={{ marginBottom: 2 }}>
+                            Xuất Excel
+                        </Button>
+                    </Box>
                 </Box>
                 <DataGrid
                     rows={rows}
                     hideFooterSelectedRowCount={true}
+                    disableColumnFilter={true}
+                    disableColumnMenu={true}
                     loading={isLoading}
                     rowCount={rowCount}
+                    sortModel={sortModel}
+                    onSortModelChange={(model) => {
+                        if (model.length > 0) {
+                            setSortModel(model);
+                        } else {
+                            setSortModel([{ field: "createdAt", sort: "desc" }]);
+                        }
+                    }}
+                    sortingMode={"server"}
                     columnVisibilityModel={{
                         id: false, // Ẩn cột "id"
                     }}
@@ -213,9 +245,15 @@ export default function ProductTable({
                         setPage(model.page);
                         setPageSize(model.pageSize);
                     }}
-                    sx={{ width: "100%" }}
                     columns={getColumns()}
                     processRowUpdate={handleRowUpdate}
+                    sx={{
+                        width: "100%" ,
+                        '& .MuiDataGrid-columnSeparator': { display: 'none' } ,
+                        "& .MuiDataGrid-root": { border: "2px solid #1976d2" },
+                        "& .MuiDataGrid-columnHeaders": { backgroundColor: "#1976d2", fontWeight: "bold", fontSize: "16px" },
+                        "& .MuiDataGrid-cell": { whiteSpace: "normal", wordWrap: "break-word", lineHeight: "1.2em", alignContent: "center", display: "block" }
+                    }}
                 />
             </Paper>
         </>
