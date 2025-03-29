@@ -102,7 +102,14 @@ const MySidebar = () => {
                         { title: "Thêm Sản Phẩm", to: "/product/add", icon: <PeopleOutlinedIcon /> },
                     ]}
                 />
-
+                <SidebarItem
+                    colors={colors}
+                    title="Sản phẩm khuyễn mãi"
+                    to="/saleProduct"
+                    icon={<PeopleOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
                 <SidebarItem
                     colors={colors}
                     title="Thể Loại Sản Phẩm"

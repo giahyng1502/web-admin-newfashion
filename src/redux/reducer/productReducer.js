@@ -27,7 +27,7 @@ const productReducer = createSlice({
 
 export const getProduct = async (dispatch,page,pageSize) => {
     try {
-        const res = await axios.get('/',{
+        const res = await axios.get('/getAllProducts',{
             params: {
                 page: page+1,
                 limit: pageSize,

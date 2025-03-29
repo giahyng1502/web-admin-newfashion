@@ -4,7 +4,6 @@ import {Box, useTheme} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {getProduct} from "../../redux/reducer/productReducer";
 import ProductTable from "./product-table";
-import {utilVietnamDong} from "../../utils/util-vietnam-dong";
 export const productData = (data)=> {
     return data.map((item,index) => ({
         id: item._id,
@@ -24,6 +23,7 @@ function Product(props) {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     const [loading, setLoading] = useState(false)
+
     useEffect(() => {
         setLoading(true)
         getProduct(dispatch,page,pageSize).then(response => {

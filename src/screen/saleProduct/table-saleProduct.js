@@ -5,14 +5,14 @@ import {useNotification} from "../../snackbar/NotificationContext";
 import React, {useState} from "react";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {utilVietnamDong} from "../../utils/util-vietnam-dong";
-import ProductDialog from "../../dialogs/show-product";
 import {DataGrid} from "@mui/x-data-grid";
-import {updateProduct} from "../../redux/reducer/productReducer";
 import {exportToExcel} from "../../utils/export-excel";
+import DeleteIcon from "@mui/icons-material/Close";
 import axios from "../../apis/axios";
-import AddSaleProduct from "../../dialogs/add-saleProduct";
+import {utilDatetime} from "../../utils/util-datetime";
+import ComfirmDelete from "../../dialogs/comfirm-delete";
 
-export default function ProductTable({
+export default function TableSaleProduct({
                                          isLoading, rows, setRows,
                                          pageSize, setPageSize,
                                          page, setPage,
@@ -20,31 +20,9 @@ export default function ProductTable({
                                      }) {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const dispatch = useDispatch();
     const showNotification = useNotification();
-    const [isShowProduct, setIsShowProduct] = useState(false);
-    const [isSaleProductDialog, setIsSaleProductDialog] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-    const [saleProductSelected, setSaleProductSelected] = useState({
-
-    });
-
-    const handleOpenDialog = async (product) => {
-        try {
-            const res = await axios.get(`/getone/${product.id}`);
-            setSelectedProduct(res.data.data);
-            setIsShowProduct(true);
-        } catch (error) {
-            showNotification("Không thể tải sản phẩm", "error");
-        }
-    };
-
-    const handleOpenSaleProductDialog = async (product) => {
-        console.log(product);
-        setSaleProductSelected(product)
-        setIsSaleProductDialog(true);
-    }
-
+    const [isShowDialog, setIsShowDialog] = useState(false)
+    const [seletedSaleProduct, setSeletedSaleProduct] = useState({})
     const handleRowUpdate = async (newRow, oldRow) => {
         try {
             const changedFields = Object.keys(newRow).filter(
@@ -61,44 +39,37 @@ export default function ProductTable({
                 return acc;
             }, {});
 
-            const res = await axios.put(`/updateProduct/${newRow.id}`, updatedData);
+            const res = await axios.put(`/saleProduct/update/${newRow.id}`, updatedData);
             if (res.status === 200) {
-                const data = res.data.product;
-                const valueDate = {
-                    id: data._id,
-                    name: data.name,
-                    cost: data.cost,
-                    price: data.price,
-                    stock: data.stock,
-                    sold: data.sold,
-                    rateCount: data.rateCount,
-                };
-                dispatch(updateProduct(valueDate));
                 showNotification("Cập nhật sản phẩm thành công", "success");
-                return valueDate;
+                return newRow
             }
         } catch (error) {
             showNotification("Lỗi khi cập nhật sản phẩm", "error");
         }
         return oldRow;
     };
-    const addSaleProduct = async (product)=> {
+    const handleDelete = async () => {
         try {
-            const res = await axios.post(`saleProduct/add`, product);
-            if (res.status === 201) {
-                showNotification('Sản phẩm này đã được thêm vào danh sách giảm giá', 'success');
+            const res = await axios.delete(`/saleProduct/delete/${seletedSaleProduct.id}`);
+            if (res.status === 200) {
+                showNotification('Xóa sản phẩm thành công','success');
+                setIsShowDialog(false)
+
             }
-            else {
-                showNotification('Sản phẩm này đã có trong danh sách hàng giảm giá', 'error')
-            }
-            setIsSaleProductDialog(false)
-        }catch (e) {
-            showNotification('Lỗi khi thêm thêm sản phẩm giảm giá', 'error');
-            console.log(e)
+        }catch(error) {
+            showNotification('Xóa sản thất bại','error');
+            setIsShowDialog(false)
+            console.log(error);
         }
     }
+    const showDialogActions = (row) => {
+        setIsShowDialog(true)
+        setSeletedSaleProduct(row)
+    }
     const getColumns = () => [
-        { field: "id", headerName: "id", width: 80 },
+        { field: "ID", headerName: "id", },
+        { field: "productId", headerName: "Mã sản phẩm", width: 80 },
         { field: "name", headerName: "Tên sản phẩm", width: 380, editable: true,
             renderCell: (params) => (
                 <Box sx={{ whiteSpace: "pre-wrap", wordWrap: "break-word", p: 1 }}>
@@ -106,46 +77,44 @@ export default function ProductTable({
                 </Box>
             )
         },
-        { field: "cost", headerName: "Giá nhập kho", editable: true, width: 120, renderCell: (params) => (
+        { field: "price", headerName: "Giá gốc", width: 100, renderCell: (params) => (
                 <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
                     <Typography>{utilVietnamDong(params.value)}</Typography>
                 </Box>
             ) },
-        { field: "price", headerName: "Giá bán ra", width: 100, editable: true, renderCell: (params) => (
+        { field: "priceSale", headerName: "Giá giảm", width: 100 ,renderCell: (params) => (
                 <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-                <Typography>{utilVietnamDong(params.value)}</Typography>
-                </Box>
-            ) },
-        { field: "stock", headerName: "Hàng tồn kho", width: 100, editable: true ,renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-                <Typography>{params.value}</Typography>
+                    <Typography>{utilVietnamDong(params.value)}</Typography>
                 </Box>
             )},
-        { field: "sold", headerName: "Lượt mua", width: 100 ,renderCell: (params) => (
+        { field: "discount", headerName: "Giảm", width: 100 , editable: true,renderCell: (params) => (
                 <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
 
-                <Typography>{params.value}</Typography>
+                    <Typography>{params.value}%</Typography>
                 </Box>
             )
         },
-        { field: "rateCount", headerName: "Đánh giá", width: 100,renderCell: (params) => (
+        { field: "limit", headerName: "Giới hạn", width: 100 , editable: true,renderCell: (params) => (
                 <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
 
-                <Typography>{params.value}</Typography>
+                    <Typography>{params.value}</Typography>
+                </Box>
+            )
+        },
+        { field: "expireAt", headerName: "Hết hạn", editable: true,width: 150 ,renderCell: (params) => (
+                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
+                    <Typography>{params.value}</Typography>
                 </Box>
             )
         },
         {
             field: "action",
             headerName: "Hành động",
-            width: 100,
+            width: 80,
             renderCell: (params) => (
                 <Box>
-                    <IconButton onClick={() => handleOpenDialog(params.row)}>
-                        <RemoveRedEyeIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleOpenSaleProductDialog(params.row)}>
-                        <RemoveRedEyeIcon />
+                    <IconButton onClick={() => showDialogActions(params.row)}>
+                        <DeleteIcon color={'error'} />
                     </IconButton>
 
                 </Box>
@@ -155,15 +124,13 @@ export default function ProductTable({
 
     return (
         <>
-            <AddSaleProduct product={saleProductSelected} onClose={()=>{setIsSaleProductDialog(false)}} open={isSaleProductDialog} addSaleProduct={addSaleProduct} />
-            <ProductDialog dispatch={dispatch} showNotification={showNotification} colors={colors} open={isShowProduct} onClose={() => setIsShowProduct(false)} product={selectedProduct} />
+            <ComfirmDelete open={isShowDialog} colors={colors} title={'Bạn có chắc chắn muốn xóa sản phẩm giảm giá này không'} onDelete={handleDelete} onClose={()=>{setIsShowDialog(false)}}/>
             <Paper
                 sx={{
                     height: "500px",
                     width: "90%",
                     maxWidth: "1200px",
                     padding: 4,
-                    overflow: "auto",
                     backgroundColor: colors.primary[400],
                     margin: "auto",
                     display: "flex",
@@ -189,7 +156,6 @@ export default function ProductTable({
                     pageSizeOptions={[5, 10, 20, 50, 100]}
                     paginationModel={{ page, pageSize }}
                     paginationMode="server"
-                    getRowHeight={() => "auto"}
                     onPaginationModelChange={(model) => {
                         setPage(model.page);
                         setPageSize(model.pageSize);
@@ -197,6 +163,7 @@ export default function ProductTable({
                     sx={{ width: "100%" }}
                     columns={getColumns()}
                     processRowUpdate={handleRowUpdate}
+                    columnVisibilityModel={{ ID: false }} // Ẩn cột ID
                 />
             </Paper>
         </>

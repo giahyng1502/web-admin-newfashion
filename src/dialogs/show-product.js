@@ -139,6 +139,7 @@ const ProductDialog = ({ open, onClose, product, colors ,dispatch,showNotificati
     return (
         <>
             <ComfirmDelete
+                colors={colors}
                 open={isOpenDelete}
                 onClose={()=>setIsOpenDelete(false)}
                 title={'Bạn có chắc chắn muốn xóa không'}
