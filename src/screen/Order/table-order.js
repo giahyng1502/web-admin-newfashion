@@ -187,7 +187,7 @@ export default function TableOrder({
             <Paper
                 sx={{
                     height: "550px",
-                    width: "90%",
+                    width: "96%",
                     maxWidth: "1200px",
                     padding: 4,
                     background: colors.primary[400],

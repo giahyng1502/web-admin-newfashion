@@ -98,60 +98,76 @@ export default function ProductTable({
         }
     }
     const getColumns = () => [
-        { field: "id", headerName: "id", width: 80 },
-        { field: "name", headerName: "Tên sản phẩm", width: 380, editable: true,
+        { field: "id", headerName: "ID", width: 80, align: "center", headerAlign: "center", hide: true },
+        { field: "name", headerName: "Tên sản phẩm", width: 380, editable: true, align: "center", headerAlign: "center",
             renderCell: (params) => (
-                <Box sx={{ whiteSpace: "pre-wrap", wordWrap: "break-word", p: 1 }}>
+                <Box sx={{
+                    whiteSpace: "pre-wrap",
+                    wordWrap: "break-word",
+                    p: 1,
+                    display: "flex",
+                    height: "100%",
+                    width: "100%"
+                }}>
                     <Typography>{params.value}</Typography>
                 </Box>
             )
         },
-        { field: "cost", headerName: "Giá nhập kho", editable: true, width: 120, renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
+        { field: "cost", headerName: "Giá nhập kho", editable: true, width: 120, align: "center", headerAlign: "center",
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
                     <Typography>{utilVietnamDong(params.value)}</Typography>
-                </Box>
-            ) },
-        { field: "price", headerName: "Giá bán ra", width: 100, editable: true, renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-                <Typography>{utilVietnamDong(params.value)}</Typography>
-                </Box>
-            ) },
-        { field: "stock", headerName: "Hàng tồn kho", width: 100, editable: true ,renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-                <Typography>{params.value}</Typography>
-                </Box>
-            )},
-        { field: "sold", headerName: "Lượt mua", width: 100 ,renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-
-                <Typography>{params.value}</Typography>
                 </Box>
             )
         },
-        { field: "rateCount", headerName: "Đánh giá", width: 100,renderCell: (params) => (
-                <Box sx={{textAlign: "center",height:"100%" ,alignContent : 'center'}}>
-
-                <Typography>{params.value}</Typography>
+        { field: "price", headerName: "Giá bán ra", width: 100, editable: true, align: "center", headerAlign: "center",
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
+                    <Typography>{utilVietnamDong(params.value)}</Typography>
+                </Box>
+            )
+        },
+        { field: "stock", headerName: "Hàng tồn kho", width: 100, editable: true, align: "center", headerAlign: "center",
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
+                    <Typography>{params.value}</Typography>
+                </Box>
+            )
+        },
+        { field: "sold", headerName: "Lượt mua", width: 100, align: "center", headerAlign: "center",
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
+                    <Typography>{params.value}</Typography>
+                </Box>
+            )
+        },
+        { field: "rateCount", headerName: "Đánh giá", width: 100, align: "center", headerAlign: "center",
+            renderCell: (params) => (
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
+                    <Typography>{params.value}</Typography>
                 </Box>
             )
         },
         {
             field: "action",
             headerName: "Hành động",
-            width: 100,
+            width: 150,
+            align: "center",
+            headerAlign: "center",
             renderCell: (params) => (
-                <Box>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>
                     <IconButton onClick={() => handleOpenDialog(params.row)}>
                         <RemoveRedEyeIcon />
                     </IconButton>
                     <IconButton onClick={() => handleOpenSaleProductDialog(params.row)}>
                         <RemoveRedEyeIcon />
                     </IconButton>
-
                 </Box>
             )
-        },
+        }
     ];
+
+
 
     return (
         <>
@@ -159,8 +175,8 @@ export default function ProductTable({
             <ProductDialog dispatch={dispatch} showNotification={showNotification} colors={colors} open={isShowProduct} onClose={() => setIsShowProduct(false)} product={selectedProduct} />
             <Paper
                 sx={{
-                    height: "500px",
-                    width: "90%",
+                    height: "550px",
+                    width: "96%",
                     maxWidth: "1200px",
                     padding: 4,
                     overflow: "auto",
@@ -186,6 +202,9 @@ export default function ProductTable({
                     hideFooterSelectedRowCount={true}
                     loading={isLoading}
                     rowCount={rowCount}
+                    columnVisibilityModel={{
+                        id: false, // Ẩn cột "id"
+                    }}
                     pageSizeOptions={[5, 10, 20, 50, 100]}
                     paginationModel={{ page, pageSize }}
                     paginationMode="server"
