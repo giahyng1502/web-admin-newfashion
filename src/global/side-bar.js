@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useContext, useState} from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { Typography, useTheme } from "@mui/material";
@@ -9,7 +9,8 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import { tokens } from "../theme";
-import {DiscountOutlined} from "@mui/icons-material"; // Nếu bạn có theme
+import {DiscountOutlined} from "@mui/icons-material";
+import {PageTitleContext} from "../context/PageTitleContext"; // Nếu bạn có theme
 
 const SidebarItem = ({ title, to, icon, selected, setSelected, children, colors }) => {
     if (children && children.length > 0) {
@@ -58,7 +59,8 @@ const MySidebar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Dashboard");
+    const { setPageTitle } = useContext(PageTitleContext);
+    const [selected, setSelected] = useState("Thống Kê");
 
     return (
         <Sidebar collapsed={isCollapsed} backgroundColor={colors.primary[400]}>
@@ -88,7 +90,10 @@ const MySidebar = () => {
                     to="/"
                     icon={<HomeOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
 
                 <SidebarItem
@@ -97,7 +102,10 @@ const MySidebar = () => {
                     to="/product"
                     icon={<PeopleOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                     children={[
                         { title: "Danh Sách Sản Phẩm", to: "/product", icon: <PeopleOutlinedIcon /> },
                         { title: "Thêm Sản Phẩm", to: "/product/add", icon: <PeopleOutlinedIcon /> },
@@ -109,7 +117,10 @@ const MySidebar = () => {
                     to="/saleProduct"
                     icon={<PeopleOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
                 <SidebarItem
                     colors={colors}
@@ -117,7 +128,10 @@ const MySidebar = () => {
                     to="/category"
                     icon={<PeopleOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
                 <SidebarItem
                     colors={colors}
@@ -125,7 +139,10 @@ const MySidebar = () => {
                     to="/orders"
                     icon={<ContactsOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
                 <SidebarItem
                     colors={colors}
@@ -133,7 +150,10 @@ const MySidebar = () => {
                     to="/user"
                     icon={<ReceiptOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
 
                 <SidebarItem
@@ -142,7 +162,10 @@ const MySidebar = () => {
                     to="/news"
                     icon={<ReceiptOutlinedIcon />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
                 <SidebarItem
                     colors={colors}
@@ -150,7 +173,10 @@ const MySidebar = () => {
                     to="/voucher"
                     icon={<DiscountOutlined />}
                     selected={selected}
-                    setSelected={setSelected}
+                    setSelected={(title) => {
+                        setSelected(title);
+                        setPageTitle(title); // Cập nhật tiêu đề khi chọn
+                    }}
                 />
             </Menu>
         </Sidebar>

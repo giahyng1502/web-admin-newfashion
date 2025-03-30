@@ -229,7 +229,7 @@ export default function VoucherTableManagement({
   return (
     <Paper
       sx={{
-        height: "85vh",
+        height: "80vh",
         width: "100%",
         maxWidth: "1600px",
         padding: 4,
@@ -237,7 +237,6 @@ export default function VoucherTableManagement({
         margin: "auto",
       }}
     >
-      <h1>PHIẾU GIẢM GIÁ</h1>
       <Box display="flex" justifyContent="space-between" width="100%">
         <Button
           variant="contained"

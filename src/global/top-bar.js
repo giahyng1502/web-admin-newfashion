@@ -1,20 +1,21 @@
 import React, { useContext, useState } from "react";
-import { Box, IconButton, InputBase, useTheme, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Typography, useTheme } from "@mui/material";
 import { ColorModeContext, tokens } from "../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/reducer/authReducer";
 import { useNavigate } from "react-router-dom";
+import { PageTitleContext } from "../context/PageTitleContext"; // Import Context
 
 function TopBar() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+    const { pageTitle } = useContext(PageTitleContext); // Lấy tiêu đề trang
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -40,14 +41,12 @@ function TopBar() {
     };
 
     return (
-        <Box display="flex" justifyContent="space-between" p={2}>
-            {/* Search Bar */}
-            <Box display="flex" borderRadius="8px" p={1} backgroundColor={colors.primary[400]}>
-                <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search..." />
-                <IconButton sx={{ p: 1 }}>
-                    <SearchIcon />
-                </IconButton>
-            </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+
+            {/* Tiêu đề trang */}
+            <Typography variant="h3" fontWeight="bold">
+                {pageTitle}
+            </Typography>
 
             {/* Icons */}
             <Box display="flex">
