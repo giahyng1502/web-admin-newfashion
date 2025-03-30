@@ -25,7 +25,7 @@ function Product(props) {
     const { products, totalProducts } = useSelector((state) => state.product);
 
     // State cho phân trang, tìm kiếm, sắp xếp
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");

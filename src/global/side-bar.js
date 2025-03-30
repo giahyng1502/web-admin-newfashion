@@ -8,7 +8,8 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import { tokens } from "../theme"; // Nếu bạn có theme
+import { tokens } from "../theme";
+import {DiscountOutlined} from "@mui/icons-material"; // Nếu bạn có theme
 
 const SidebarItem = ({ title, to, icon, selected, setSelected, children, colors }) => {
     if (children && children.length > 0) {
@@ -134,11 +135,20 @@ const MySidebar = () => {
                     selected={selected}
                     setSelected={setSelected}
                 />
+
                 <SidebarItem
                     colors={colors}
-                    title="Tin Tức"
+                    title="Quản lý bài viết"
                     to="/news"
                     icon={<ReceiptOutlinedIcon />}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
+                <SidebarItem
+                    colors={colors}
+                    title="Quản lý phiếu giảm giá"
+                    to="/voucher"
+                    icon={<DiscountOutlined />}
                     selected={selected}
                     setSelected={setSelected}
                 />

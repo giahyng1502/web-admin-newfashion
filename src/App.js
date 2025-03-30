@@ -5,7 +5,6 @@ import Product from "./screen/product/product";
 import Team from "./screen/dashboard/team";
 import Category from "./screen/category/category";
 import Order from "./screen/Order/order";
-import Newfeed from "./screen/dashboard/newfeed";
 import MySidebar from "./global/side-bar";
 import TopBar from "./global/top-bar";
 import PrivateRoute from "./PrivateRoute";
@@ -14,6 +13,8 @@ import {NotificationProvider} from "./snackbar/NotificationContext";
 import Unauthorized from "./screen/unauthorized-page";
 import AddProduct from "./screen/product/add-product";
 import SaleProduct from "./screen/saleProduct/saleProduct";
+import News from "./screen/dashboard/News";
+import Voucher from "./screen/dashboard/Voucher";
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -40,7 +41,8 @@ function App() {
                                             <Route path="/user" element={<Team />} />
                                             <Route path="/category" element={<Category />} />
                                             <Route path="/orders" element={<Order />} />
-                                            <Route path="/newfeed" element={<Newfeed />} />
+                                            <Route path="/news" element={<News />} />
+                                            <Route path="/voucher" element={<Voucher />} />
                                         </Routes>
                                     </main>
                                 </PrivateRoute>
