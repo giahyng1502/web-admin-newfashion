@@ -100,7 +100,7 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
           }}
         >
           <Typography variant="h3" sx={{ mb: 2 }}>
-            Thêm Voucher
+            Update Voucher
           </Typography>
 
           <TextField
@@ -165,7 +165,7 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
             sx={{ mt: 2 }}
             onClick={handleSubmit}
           >
-            Thêm Voucher
+            Update Voucher
           </Button>
         </Box>
       </Fade>
