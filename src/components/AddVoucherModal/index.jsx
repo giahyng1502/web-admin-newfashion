@@ -17,6 +17,7 @@ const AddVoucherModal = ({ open, handleClose }) => {
     voucherDetail: "",
     limit: 0,
     startDate: "",
+    maxDiscountPrice : 0,
     endDate: "",
     discount: 0,
   });
@@ -36,6 +37,7 @@ const AddVoucherModal = ({ open, handleClose }) => {
             voucherDetail: "",
             limit: 0,
             startDate: "",
+            maxDiscountPrice: 0,
             endDate: "",
             discount: 0,
           });
@@ -101,6 +103,15 @@ const AddVoucherModal = ({ open, handleClose }) => {
             fullWidth
             margin="normal"
             value={voucherData.limit}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Số tiền tối đa được giảm"
+            name="maxDiscountPrice"
+            type="number"
+            fullWidth
+            margin="normal"
+            value={voucherData.maxDiscountPrice}
             onChange={handleChange}
           />
           <TextField

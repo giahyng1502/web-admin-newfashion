@@ -170,10 +170,12 @@ const handleUpdateCate =async ()=> {
                 open={openDeleteDialog}
                 onClose={() => setOpenDeleteDialog(false)}
                 onDelete={handleDelete}
+                colors={colors}
                 title={'Bạn có chắc chắn muốn xóa danh mục sản phẩm này không'}
             />
             <ConfirmDelete
                 open={openDeleteDialogCate}
+                colors={colors}
                 onClose={() => setOpenDeleteDialogCate(false)}
                 onDelete={handleDeleteCate}
                 title={'Bạn có chắc chắn muốn xóa danh mục thể loại sản phẩm này không'}

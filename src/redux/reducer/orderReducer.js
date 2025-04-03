@@ -6,12 +6,12 @@ const orderReducer = createSlice({
     name: "order",
     initialState: {
         orders: [],
-        totalProducts: 0,
+        total: 0,
     },
     reducers : {
         getOrders: (state, action) => {
             state.orders = action.payload;
-            state.totalProducts = action.payload.totalProducts;
+            state.total = action.payload.total;
         },
         updateOrders: (state, action) => {
             state.orders = state.orders.map(order =>
@@ -23,12 +23,27 @@ const orderReducer = createSlice({
 
     },
 })
-export const getAllOrder = async (dispatch) => {
+export const getAllOrder = async (dispatch,
+                                  page,
+                                  pageSize,
+                                  sortField = "dateCreated",
+                                  sortOrder = "desc",
+                                  search,
+) => {
     try {
-        const res = await axios.get("/order/getAll");
+
+        const res = await axios.get("/order/search",{
+            params : {
+                page : page+1,
+                limit: pageSize,
+                sortField,
+                sortOrder,
+                search,
+            }
+        });
         if (res.status === 200) {
             const order = utilOrder(res.data.data)
-            order.totalProducts = res.data.totalProducts;
+            order.total = res.data.total;
             dispatch(getOrders(order));
         }
     }catch(error) {

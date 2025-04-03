@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import {utilDatetime} from "../../utils/util-datetime";
 import {utilVietnamDong} from "../../utils/util-vietnam-dong";
+import OrderItemsTable from "./table-detail";
 
 const OrderDetail = ({ open, setOpen, order, colors }) => {
     const statusLabels = [
@@ -45,7 +46,7 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                         <Box>
                             {/* Mã đơn hàng & Thông tin khách hàng */}
                             <Typography variant="h5" gutterBottom>
-                                Mã đơn hàng: {order.id}
+                                Mã đơn hàng: {order.orderCode || 'Không tìm thấy mã đơn hàng'}
                             </Typography>
                             <Typography variant="body1">
                                 Khách hàng: {order.customer}
@@ -59,35 +60,36 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                             <Typography variant="h5" gutterBottom>
                                 Sản phẩm trong đơn hàng:
                             </Typography>
-                            <List>
-                                {order.item &&
-                                    order.item.length > 0 &&
-                                    order.item.map((item, index) => (
-                                        <ListItem key={index} alignItems="center">
-                                            <ListItemAvatar sx={{ mr: 2 }}>
-                                                <Avatar
-                                                    src={item.color.imageColor || "/no-image.png"}
-                                                    variant="rounded"
-                                                    sx={{ width: 80, height: 80 }}
-                                                />
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={item.productName}
-                                                secondary={
-                                                    <>
-                                                        <Typography component="span">
-                                                            Màu: {item.color.nameColor}, Kích thước: {item.size}
-                                                        </Typography>
-                                                        <br />
-                                                        <Typography component="span">
-                                                            Số lượng: {item.quantity} | Giá: {utilVietnamDong(item.price)}
-                                                        </Typography>
-                                                    </>
-                                                }
-                                            />
-                                        </ListItem>
-                                    ))}
-                            </List>
+                            {/*<List>*/}
+                            {/*    {order.item &&*/}
+                            {/*        order.item.length > 0 &&*/}
+                            {/*        order.item.map((item, index) => (*/}
+                            {/*            <ListItem key={index} alignItems="center">*/}
+                            {/*                <ListItemAvatar sx={{ mr: 2 }}>*/}
+                            {/*                    <Avatar*/}
+                            {/*                        src={item.color.imageColor || "/no-image.png"}*/}
+                            {/*                        variant="rounded"*/}
+                            {/*                        sx={{ width: 80, height: 80 }}*/}
+                            {/*                    />*/}
+                            {/*                </ListItemAvatar>*/}
+                            {/*                <ListItemText*/}
+                            {/*                    primary={item.productName}*/}
+                            {/*                    secondary={*/}
+                            {/*                        <>*/}
+                            {/*                            <Typography component="span">*/}
+                            {/*                                Màu: {item.color.nameColor}, Kích thước: {item.size}*/}
+                            {/*                            </Typography>*/}
+                            {/*                            <br />*/}
+                            {/*                            <Typography component="span">*/}
+                            {/*                                Số lượng: {item.quantity} | Giá: {utilVietnamDong(item.price)}*/}
+                            {/*                            </Typography>*/}
+                            {/*                        </>*/}
+                            {/*                    }*/}
+                            {/*                />*/}
+                            {/*            </ListItem>*/}
+                            {/*        ))}*/}
+                            {/*</List>*/}
+                            <OrderItemsTable order={order}/>
                             <Divider sx={{ my: 2 }} />
 
                             {/* Lịch sử trạng thái đơn hàng */}

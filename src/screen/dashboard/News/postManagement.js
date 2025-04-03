@@ -256,7 +256,7 @@ export default function PostTable({
   return (
     <Paper
       sx={{
-        height: "85vh",
+        height: "80vh",
         width: "100%",
         maxWidth: "1600px",
         padding: 4,
@@ -264,7 +264,6 @@ export default function PostTable({
         margin: "auto",
       }}
     >
-      <h1>BÀI VIẾT</h1>
       <Box display="flex" justifyContent="space-between" width="100%">
         <Button
           variant="contained"

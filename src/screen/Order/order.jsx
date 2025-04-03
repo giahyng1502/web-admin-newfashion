@@ -1,57 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import {Box, TextField, Button, Typography} from "@mui/material";
 import TableOrder from "./table-order";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrder } from "../../redux/reducer/orderReducer";
+
 export const utilOrder = (orders) => {
-  return orders.map((order) => ({
-    id: order._id,
-    customer: order.shippingAddress.name,
-    status: order.status,
-    totalPrice: order.totalPrice,
-    shippingAddress: `${order.shippingAddress.phoneNumber} \n${order.shippingAddress.address}`,
-    productDesc: order.item
-      .map(
-        (data) =>
-          `- X${data.quantity} ${data.productName} màu ${data.color.nameColor} cỡ ${data.size} `
-      )
-      .join("\n"),
-    statusHistory: order.statusHistory,
-    item: order.item,
-    voucherId: order.voucherId,
-    point: order.point,
-    disCountSale: order.disCountSale,
-  }));
+    return orders.map((order) => ({
+        id: order._id,
+        customer: order.shippingAddress.name,
+        orderCode: order.orderCode,
+        status: order.status,
+        totalPrice: order.totalPrice,
+        phoneNumber: order.shippingAddress.phoneNumber,
+        shippingAddress: `${order.shippingAddress.address}`,
+        statusHistory: order.statusHistory,
+        items: order.items,
+        dateCreated: order.dateCreated,
+        voucherId: order.voucherId,
+        point: order.point,
+        disCountSale: order.disCountSale,
+    }));
 };
 
-function Order(props) {
-  const { orders, totalProducts } = useSelector((state) => state.order);
-  const dispatch = useDispatch();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
-  const [loading, setLoading] = useState(false);
+function Order() {
+    const { orders, total } = useSelector((state) => state.order);
+    const dispatch = useDispatch();
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(5);
+    const [loading, setLoading] = useState(false);
+    const [sortModel, setSortModel] = useState([]);
+    const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    setLoading(true);
-    getAllOrder(dispatch).then((response) => {
-      setLoading(false);
-    });
-    setLoading(false);
-  }, [dispatch]);
+    useEffect(() => {
+        const fetchOrders = async () => {
+            setLoading(true);
+            const sortField = sortModel.length > 0 ? sortModel[0].field : "dateCreated";
+            const sortOrder = sortModel.length > 0 ? sortModel[0].sort : "desc";
 
-  return (
-    <Box p={2}>
-      <TableOrder
-        rows={orders}
-        isLoading={loading}
-        setPageSize={setPageSize}
-        rowCount={totalProducts}
-        page={page}
-        pageSize={pageSize}
-        setPage={setPage}
-      />
-    </Box>
-  );
+            await getAllOrder(dispatch, page, pageSize, sortField, sortOrder, search);
+            setLoading(false);
+        };
+
+        fetchOrders();
+    }, [page, pageSize, sortModel, search, dispatch]);
+    return (
+        <Box p={2}>
+            <TableOrder
+                rows={orders}
+                isLoading={loading}
+                setPageSize={setPageSize}
+                rowCount={total}
+                page={page}
+                sortModel={sortModel}
+                setSortModel={setSortModel}
+                pageSize={pageSize}
+                setPage={setPage}
+                setSearch={setSearch}
+            />
+        </Box>
+    );
 }
 
 export default Order;
