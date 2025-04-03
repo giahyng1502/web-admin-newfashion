@@ -28,6 +28,9 @@ const VoucherDetailModal = ({ open, handleClose, voucher }) => {
         <Typography>
           <strong>Chi tiết:</strong> {voucher.voucherDetail}
         </Typography>
+          <Typography>
+          <strong>Số tiền giảm tối đa:</strong> {voucher.maxDiscountPrice}
+        </Typography>
         <Typography>
           <strong>Số lượng:</strong> {voucher.limit}
         </Typography>

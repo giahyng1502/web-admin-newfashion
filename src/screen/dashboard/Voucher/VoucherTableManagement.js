@@ -166,6 +166,7 @@ export default function VoucherTableManagement({
     { field: "voucherDetail", headerName: "Thông tin chi tiết", width: 250 },
     { field: "limit", headerName: "Số Lượng", width: 90 },
     { field: "discount", headerName: "Giảm Giá (%)", width: 115 },
+    { field: "maxDiscountPrice", headerName: "Giảm giá tối đa", width: 100 },
     { field: "startDate", headerName: "Ngày bắt đầu", width: 170 },
     { field: "endDate", headerName: "Ngày kết thúc", width: 170 },
     {
@@ -266,12 +267,15 @@ export default function VoucherTableManagement({
           rows={rows}
           hideFooterSelectedRowCount={true}
           loading={isLoading}
-          rowCount={rows.length > 0 ? rowCount : 0}
+          columnVisibilityModel={{
+            _id: false, // Ẩn cột "id"
+          }}
           rowHeight={100}
           getRowId={(row) => row._id || row.index}
           pageSizeOptions={[5, 10, 20, 50, 100]}
           paginationModel={{ page, pageSize }}
           paginationMode="server"
+          hideFooterPagination={true}
           onPaginationModelChange={(model) => {
             setPage(model.page);
             setPageSize(model.pageSize);

@@ -18,6 +18,7 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
     voucherDetail: "",
     limit: 0,
     startDate: "",
+    maxDiscountPrice : 0,
     endDate: "",
     discount: 0,
   });
@@ -155,6 +156,15 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
             fullWidth
             margin="normal"
             value={voucherData.discount}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Giảm giá (%)"
+            name="maxDiscountPrice"
+            type="number"
+            fullWidth
+            margin="normal"
+            value={voucherData.maxDiscountPrice}
             onChange={handleChange}
           />
 

@@ -16,8 +16,8 @@ function OrderItemsTable({ order }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {order.item && order.item.length > 0 ? (
-                        order.item.map((item, index) => (
+                    {order.items && order.items.length > 0 ? (
+                        order.items.map((item, index) => (
                             <TableRow key={index}>
                                 <TableCell align="center">
                                     <Avatar
@@ -30,7 +30,7 @@ function OrderItemsTable({ order }) {
                                 <TableCell align="center">{item.color.nameColor}</TableCell>
                                 <TableCell align="center">{item.size}</TableCell>
                                 <TableCell align="center">{item.quantity}</TableCell>
-                                <TableCell align="center">{utilVietnamDong(item.price)}</TableCell>
+                                <TableCell align="center">{utilVietnamDong(item.total)}</TableCell>
                             </TableRow>
                         ))
                     ) : (

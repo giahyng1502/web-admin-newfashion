@@ -14,7 +14,7 @@ export const utilOrder = (orders) => {
         phoneNumber: order.shippingAddress.phoneNumber,
         shippingAddress: `${order.shippingAddress.address}`,
         statusHistory: order.statusHistory,
-        item: order.item,
+        items: order.items,
         dateCreated: order.dateCreated,
         voucherId: order.voucherId,
         point: order.point,
