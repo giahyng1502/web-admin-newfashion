@@ -20,6 +20,8 @@ export default function Voucher() {
     endDate: new Date(voucher.endDate).toLocaleString(),
   }));
 
+  const handleRefreshVouchers = () => dispatch(fetchVouchers());
+
   return (
     <Box p={2}>
       <VoucherTableManagement
@@ -30,6 +32,7 @@ export default function Voucher() {
         page={page}
         setPage={setPage}
         rowCount={rowCount}
+        onRefresh={handleRefreshVouchers}
       />
     </Box>
   );

@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Backdrop,
-  Fade,
-} from "@mui/material";
+import { TextField, Button, Dialog, DialogContent } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { updateVoucher } from "../../redux/voucher/voucherSlice";
+import { useNotify } from "../../hooks/useNotify";
 
 const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
   const [voucherData, setVoucherData] = useState({
@@ -18,12 +11,14 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
     voucherDetail: "",
     limit: 0,
     startDate: "",
-    maxDiscountPrice : 0,
+    maxDiscountPrice: 0,
     endDate: "",
     discount: 0,
   });
 
   const dispatch = useDispatch();
+
+  const { updateSuccess } = useNotify();
 
   useEffect(() => {
     if (open && voucher) {
@@ -59,10 +54,10 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
       }
 
       await dispatch(
-        updateVoucher({ voucherId: voucherData._id, data: voucherData })
+        updateVoucher({ voucherId: voucherData._id, voucherData })
       ).then((result) => {
         if (result.meta.requestStatus === "fulfilled") {
-          alert("Voucher đã được cập nhật thành công!");
+          updateSuccess("voucher");
           handleClose();
         } else {
           alert("Cập nhật voucher thất bại!");
@@ -77,109 +72,96 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
   if (!open) return null;
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={open}>
-        <Box
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogContent>Update Voucher</DialogContent>
+      <DialogContent>
+        <TextField
+          label="Tên Voucher"
+          name="voucherName"
+          fullWidth
+          margin="normal"
+          value={voucherData.voucherName}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Chi tiết"
+          name="voucherDetail"
+          fullWidth
+          margin="normal"
+          value={voucherData.voucherDetail}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Giới hạn"
+          name="limit"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={voucherData.limit}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Ngày bắt đầu"
+          name="startDate"
+          type="date"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{ shrink: true }}
+          value={voucherData.startDate}
+          onChange={handleChange}
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
+            '& input[type="date"]::-webkit-calendar-picker-indicator': {
+              filter: "invert(1)",
+              cursor: "pointer",
+            },
           }}
+        />
+        <TextField
+          label="Ngày kết thúc"
+          name="endDate"
+          type="date"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{ shrink: true }}
+          value={voucherData.endDate}
+          onChange={handleChange}
+          sx={{
+            '& input[type="date"]::-webkit-calendar-picker-indicator': {
+              filter: "invert(1)",
+              cursor: "pointer",
+            },
+          }}
+        />
+        <TextField
+          label="Giảm giá (%)"
+          name="discount"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={voucherData.discount}
+          onChange={handleChange}
+        />
+        <TextField
+          label="Số tiền tối đa được giảm"
+          name="maxDiscountPrice"
+          type="number"
+          fullWidth
+          margin="normal"
+          value={voucherData.maxDiscountPrice}
+          onChange={handleChange}
+        />
+
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={handleSubmit}
         >
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            Update Voucher
-          </Typography>
-
-          <TextField
-            label="Tên Voucher"
-            name="voucherName"
-            fullWidth
-            margin="normal"
-            value={voucherData.voucherName}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Chi tiết"
-            name="voucherDetail"
-            fullWidth
-            margin="normal"
-            value={voucherData.voucherDetail}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Giới hạn"
-            name="limit"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={voucherData.limit}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Ngày bắt đầu"
-            name="startDate"
-            type="date"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            value={voucherData.startDate}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Ngày kết thúc"
-            name="endDate"
-            type="date"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            value={voucherData.endDate}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Giảm giá (%)"
-            name="discount"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={voucherData.discount}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Giảm giá (%)"
-            name="maxDiscountPrice"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={voucherData.maxDiscountPrice}
-            onChange={handleChange}
-          />
-
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={handleSubmit}
-          >
-            Update Voucher
-          </Button>
-        </Box>
-      </Fade>
-    </Modal>
+          Update Voucher
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 };
 

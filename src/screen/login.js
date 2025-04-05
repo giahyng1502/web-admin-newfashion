@@ -52,7 +52,7 @@ const Login = () => {
     } catch (e) {
       showNotification("Lỗi server", "error");
       dispatch(loginFailure());
-      console.log(e);
+      console.log("Lỗi: ", e);
     }
   };
 

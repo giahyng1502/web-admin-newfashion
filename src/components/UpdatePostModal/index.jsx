@@ -6,11 +6,15 @@ import {
   Button,
   Typography,
   IconButton,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "../../apis/axios";
+import { uploadImage } from "../../upload/uploadImage";
+import { useNotify } from "../../hooks/useNotify";
 
 const PreviewContainer = styled(Box)({
   display: "flex",
@@ -56,6 +60,7 @@ export default function UpdatePostModal({ open, handleClose, post, onUpdate }) {
   const [content, setContent] = useState("");
   const [hashtag, setHashtag] = useState("");
   const [images, setImages] = useState([]);
+  const { updateSuccess } = useNotify();
 
   useEffect(() => {
     if (open && post) {
@@ -108,10 +113,8 @@ export default function UpdatePostModal({ open, handleClose, post, onUpdate }) {
 
     try {
       if (formData.has("files")) {
-        const uploadRes = await axios.post(`/upload`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        uploadedImages = [...uploadedImages, ...uploadRes.data.url];
+        const uploadRes = uploadImage(formData);
+        uploadedImages = [...uploadedImages, ...uploadRes];
       }
 
       const updatedPost = {
@@ -122,6 +125,7 @@ export default function UpdatePostModal({ open, handleClose, post, onUpdate }) {
       };
 
       onUpdate(updatedPost);
+      updateSuccess("bài viết");
       handleClose();
     } catch (error) {
       console.error("Lỗi API: ", error);
@@ -129,38 +133,16 @@ export default function UpdatePostModal({ open, handleClose, post, onUpdate }) {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          bgcolor: "background.paper",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Cập nhật bài viết
-        </Typography>
-        <TextField
-          fullWidth
-          label="Nội dung"
-          multiline
-          rows={3}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          margin="normal"
-        />
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogTitle>Cập Nhật Bài Viết</DialogTitle>
+      <DialogContent>
         <TextField
           fullWidth
           label="Hashtag"
           value={hashtag}
           onChange={(e) => setHashtag(e.target.value)}
           margin="normal"
+          sx={{ mt: 2 }}
         />
 
         {/* Xem trước ảnh */}
@@ -210,7 +192,7 @@ export default function UpdatePostModal({ open, handleClose, post, onUpdate }) {
             Cập nhật
           </Button>
         </Box>
-      </Box>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -8,23 +8,9 @@ export const createPost = createAsyncThunk(
   "posts/createPost",
   async (postData, { rejectWithValue }) => {
     try {
-      const formFilesData = new FormData();
-
-      postData.images.forEach((fileObj) => {
-        formFilesData.append("files", fileObj.file);
-      });
-
-      const uploadPromise = axios.post(`/upload`, formFilesData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      const uploadRes = await uploadPromise;
-
-      const imageUrls = uploadRes.data.url || [];
-
       const data = {
         content: postData.content,
-        images: imageUrls,
+        images: postData.images,
         hashtag: `#${postData.hashtag}`,
       };
 

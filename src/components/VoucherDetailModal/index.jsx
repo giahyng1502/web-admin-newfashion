@@ -28,9 +28,6 @@ const VoucherDetailModal = ({ open, handleClose, voucher }) => {
         <Typography>
           <strong>Chi tiết:</strong> {voucher.voucherDetail}
         </Typography>
-          <Typography>
-          <strong>Số tiền giảm tối đa:</strong> {voucher.maxDiscountPrice}
-        </Typography>
         <Typography>
           <strong>Số lượng:</strong> {voucher.limit}
         </Typography>
@@ -42,6 +39,9 @@ const VoucherDetailModal = ({ open, handleClose, voucher }) => {
         </Typography>
         <Typography>
           <strong>Giảm giá:</strong> {voucher.discount}%
+        </Typography>
+        <Typography>
+          <strong>Số tiền tối đa được giảm:</strong> {voucher.maxDiscountPrice}
         </Typography>
 
         <Button
