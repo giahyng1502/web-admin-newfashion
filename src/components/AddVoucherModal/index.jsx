@@ -10,18 +10,20 @@ import {
 } from "@mui/material";
 import { createVoucher } from "../../redux/voucher/voucherSlice";
 import { useDispatch } from "react-redux";
+import { useNotify } from "../../hooks/useNotify";
 
-const AddVoucherModal = ({ open, handleClose }) => {
+const AddVoucherModal = ({ open, handleClose, onSuccess }) => {
   const [voucherData, setVoucherData] = useState({
     voucherName: "",
     voucherDetail: "",
     limit: 0,
     startDate: "",
-    maxDiscountPrice : 0,
+    maxDiscountPrice: 0,
     endDate: "",
     discount: 0,
   });
   const dispatch = useDispatch();
+  const { createSuccess } = useNotify();
 
   const handleChange = (e) => {
     setVoucherData({ ...voucherData, [e.target.name]: e.target.value });
@@ -31,7 +33,7 @@ const AddVoucherModal = ({ open, handleClose }) => {
     try {
       await dispatch(createVoucher(voucherData)).then((result) => {
         if (result.meta.requestStatus === "fulfilled") {
-          alert("Voucher đã được tạo thành công!");
+          createSuccess("Voucher");
           setVoucherData({
             voucherName: "",
             voucherDetail: "",
@@ -41,6 +43,7 @@ const AddVoucherModal = ({ open, handleClose }) => {
             endDate: "",
             discount: 0,
           });
+          onSuccess();
           handleClose();
         } else {
           alert("Tạo voucher thất bại!");
@@ -106,15 +109,6 @@ const AddVoucherModal = ({ open, handleClose }) => {
             onChange={handleChange}
           />
           <TextField
-            label="Số tiền tối đa được giảm"
-            name="maxDiscountPrice"
-            type="number"
-            fullWidth
-            margin="normal"
-            value={voucherData.maxDiscountPrice}
-            onChange={handleChange}
-          />
-          <TextField
             label="Ngày bắt đầu"
             name="startDate"
             type="date"
@@ -123,6 +117,12 @@ const AddVoucherModal = ({ open, handleClose }) => {
             InputLabelProps={{ shrink: true }}
             value={voucherData.startDate}
             onChange={handleChange}
+            sx={{
+              '& input[type="date"]::-webkit-calendar-picker-indicator': {
+                filter: "invert(1)",
+                cursor: "pointer",
+              },
+            }}
           />
           <TextField
             label="Ngày kết thúc"
@@ -133,6 +133,12 @@ const AddVoucherModal = ({ open, handleClose }) => {
             InputLabelProps={{ shrink: true }}
             value={voucherData.endDate}
             onChange={handleChange}
+            sx={{
+              '& input[type="date"]::-webkit-calendar-picker-indicator': {
+                filter: "invert(1)",
+                cursor: "pointer",
+              },
+            }}
           />
           <TextField
             label="Giảm giá (%)"
@@ -143,7 +149,15 @@ const AddVoucherModal = ({ open, handleClose }) => {
             value={voucherData.discount}
             onChange={handleChange}
           />
-
+          <TextField
+            label="Số tiền tối đa được giảm"
+            name="maxDiscountPrice"
+            type="number"
+            fullWidth
+            margin="normal"
+            value={voucherData.maxDiscountPrice}
+            onChange={handleChange}
+          />
           <Button
             variant="contained"
             color="primary"

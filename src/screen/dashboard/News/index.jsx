@@ -20,6 +20,10 @@ export default function News() {
     createdAt: new Date(post.createdAt).toLocaleString(),
   }));
 
+  const handleRefreshPosts = () => {
+    dispatch(getAllPosts());
+  };
+
   return (
     <Box p={2}>
       <PostTable
@@ -30,6 +34,7 @@ export default function News() {
         page={page}
         setPage={setPage}
         rowCount={rowCount}
+        onRefresh={handleRefreshPosts}
       />
     </Box>
   );

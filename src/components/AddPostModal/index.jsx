@@ -6,18 +6,25 @@ import {
   DialogActions,
   TextField,
   Button,
+  IconButton,
+  Box,
+  Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost } from "../../redux/post/postActions";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import axios from "../../apis/axios";
+import { useNotify } from "../../hooks/useNotify";
 
-const AddPostModal = ({ open, handleClose }) => {
+const AddPostModal = ({ open, handleClose, onSuccess }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.post);
   const [content, setContent] = useState("");
   const [hashtag, setHashtag] = useState("");
   const [images, setImages] = useState([]);
+  const { createSuccess } = useNotify();
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
 
     if (selectedFiles.length + images.length > 5) {
@@ -31,6 +38,25 @@ const AddPostModal = ({ open, handleClose }) => {
     }));
 
     setImages([...images, ...imagePreviews]);
+
+    const formFilesData = new FormData();
+    selectedFiles.forEach((file) => formFilesData.append("files", file));
+
+    try {
+      const uploadRes = await axios.post(`/upload`, formFilesData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const uploadedUrls = uploadRes.data.url || [];
+      setImages((prev) =>
+        prev.map((img, index) => ({
+          ...img,
+          url: uploadedUrls[index],
+        }))
+      );
+    } catch (error) {
+      alert("Lỗi upload ảnh!");
+    }
   };
 
   const handleRemoveImage = (index) => {
@@ -47,16 +73,17 @@ const AddPostModal = ({ open, handleClose }) => {
     const postData = {
       content,
       hashtag,
-      images: images.map((img) => ({ file: img.file })),
+      images: images.map((img) => img.url),
     };
 
     try {
       await dispatch(createPost(postData)).then((result) => {
         if (result.meta.requestStatus === "fulfilled") {
-          alert("Bài viết đã được tạo thành công!");
+          createSuccess("Bài viết");
           setContent("");
           setHashtag("");
           setImages([]);
+          onSuccess();
         } else {
           alert("Tạo bài viết thất bại!");
         }
@@ -70,12 +97,26 @@ const AddPostModal = ({ open, handleClose }) => {
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>Tạo Bài Viết</DialogTitle>
       <DialogContent>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFileChange}
-        />
+        <Box display="flex" alignItems="center" mt={2}>
+          <input
+            type="file"
+            accept="image/*"
+            id="upload-image"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            multiple
+          />
+          <label htmlFor="upload-image">
+            <IconButton color="secondary" component="span">
+              <PhotoCamera />
+            </IconButton>
+          </label>
+          <Typography variant="body2">
+            {images.length > 0
+              ? `Đã chọn ${images.length} ảnh`
+              : "Chọn ảnh mới"}
+          </Typography>
+        </Box>
         {/* Hiển thị ảnh đã chọn */}
         <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
           {images.map((image, index) => (
@@ -124,7 +165,7 @@ const AddPostModal = ({ open, handleClose }) => {
           sx={{ mt: 2 }}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ mr: 2, mb: 2 }}>
         <Button onClick={handleClose} color="error">
           Hủy
         </Button>
@@ -133,7 +174,6 @@ const AddPostModal = ({ open, handleClose }) => {
           color="primary"
           onClick={handleSubmit}
           disabled={loading}
-          sx={{ mt: 2 }}
         >
           {loading ? "Đang lưu..." : "Lưu bài viết"}
         </Button>

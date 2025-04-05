@@ -1,25 +1,13 @@
-import { Modal, Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Dialog, DialogContent } from "@mui/material";
 
 export default function PostDetailModal({ open, handleClose, post }) {
   if (!post) return null;
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          bgcolor: "background.paper",
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
-        }}
-      >
-        <Typography variant="h6" component="h2">
-          Chi tiết bài viết
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogContent>
+        <Typography variant="h3" component="h2">
+          Bài viết chi tiết
         </Typography>
         <Typography sx={{ mt: 2 }}>
           <strong>ID:</strong> {post._id}
@@ -30,18 +18,25 @@ export default function PostDetailModal({ open, handleClose, post }) {
         <Typography sx={{ mt: 1 }}>
           <strong>Ngày tạo:</strong> {post.createdAt}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Typography sx={{ mt: 1 }}>
+          <strong>Người tạo:</strong> {post.user}
+        </Typography>
+        <Box sx={{ display: "flex", mt: 2 }}>
           {post.images?.length > 0 ? (
-            <img
-              src={post.images[0]}
-              alt="Post"
-              style={{
-                width: 100,
-                height: 100,
-                objectFit: "cover",
-                borderRadius: 5,
-              }}
-            />
+            post.images.map((p, index) => (
+              <img
+                key={index}
+                src={p}
+                alt="Post"
+                style={{
+                  width: 100,
+                  height: 100,
+                  objectFit: "cover",
+                  borderRadius: 5,
+                  marginRight: 8,
+                }}
+              />
+            ))
           ) : (
             <Typography>Không có ảnh</Typography>
           )}
@@ -55,7 +50,7 @@ export default function PostDetailModal({ open, handleClose, post }) {
         >
           Đóng
         </Button>
-      </Box>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
