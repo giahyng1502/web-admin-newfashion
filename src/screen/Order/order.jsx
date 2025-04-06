@@ -18,7 +18,12 @@ export const utilOrder = (orders) => {
         dateCreated: order.dateCreated,
         voucherId: order.voucherId,
         point: order.point,
-        disCountSale: order.disCountSale,
+        originalPrice : order.originalPrice,
+        totalDiscountSale : order.totalDiscountSale,
+        paymentMethod : order.paymentMethod,
+        paymentId : order.paymentId,
+        totalVoucherDiscount : order.totalVoucherDiscount,
+
     }));
 };
 

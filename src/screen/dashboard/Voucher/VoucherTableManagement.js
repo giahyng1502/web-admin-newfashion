@@ -113,8 +113,8 @@ export default function VoucherTableManagement({
     <Paper
       sx={{
         height: "80vh",
-        width: "100%",
-        maxWidth: "1600px",
+        width: "96%",
+        maxWidth: "1200px",
         padding: 4,
         background: colors.primary[400],
         margin: "auto",

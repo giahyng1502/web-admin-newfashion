@@ -125,92 +125,116 @@ const getColumns = (dispatch, showNotification, handleOrderDetail) => [
     field: "status",
     headerName: "Trạng thái",
     width: 210,
-    renderCell: (params) => {
-      const statusOptions = [
-        { value: 0, label: "Chờ xác nhận", color: "#FFC107" },
-        { value: 1, label: "Chờ giao hàng", color: "#2196F3" },
-        { value: 2, label: "Đang vận chuyển", color: "#673AB7" },
-        { value: 3, label: "Giao hàng thành công", color: "#4CAF50" },
-        { value: 4, label: "Hủy đơn hàng", color: "#F44336" },
-      ];
+      renderCell: (params) => {
+          const statusOptions = [
+              { value: 0, label: "Chờ xác nhận", color: "#FFC107" },
+              { value: 1, label: "Chờ giao hàng", color: "#2196F3" },
+              { value: 2, label: "Đang vận chuyển", color: "#673AB7" },
+              { value: 3, label: "Giao hàng thành công", color: "#4CAF50" },
+              { value: 4, label: "Hủy đơn hàng", color: "#F44336" },
+              { value: 6, label: "Chưa thanh toán", color: "#5d6ce4" },
+          ];
 
-      const selectedStatus = statusOptions.find(
-        (item) => item.value === params.value
-      );
-      const selectedColor = selectedStatus
-        ? selectedStatus.color
-        : "transparent";
+          const selectedStatus = statusOptions.find(
+              (item) => item.value === params.value
+          );
+          const selectedColor = selectedStatus
+              ? selectedStatus.color
+              : "transparent";
 
-      // Ẩn tất cả lựa chọn khi trạng thái là "Hủy đơn hàng" (4)
-      if (params.value === 4) {
-        return (
-          <Typography
-            sx={{
-              fontWeight: "bold",
-              color: "white",
-              backgroundColor: selectedColor,
-              padding: "6px 12px",
-              borderRadius: "5px",
-              display: "inline-block",
-            }}
-          >
-            {selectedStatus.label}
-          </Typography>
-        );
-      }
-
-      // Lọc trạng thái tiếp theo hợp lệ
-      let availableStatusOptions = statusOptions.filter(
-        (item) => item.value >= params.value
-      );
-
-      // Nếu trạng thái hiện tại > 1, không hiển thị "Hủy đơn hàng" (4)
-      if (params.value > 1) {
-        availableStatusOptions = availableStatusOptions.filter(
-          (item) => item.value !== 4
-        );
-      }
-
-      return (
-        <Select
-          value={params.value}
-          sx={{
-            width: "100%",
-            backgroundColor: selectedColor,
-            color: "white",
-            "& .MuiSelect-select": { fontWeight: "bold" },
-            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-          }}
-          variant="filled"
-          onChange={(event) =>
-            updateStatus(
-              params.row.id,
-              event.target.value,
-              dispatch,
-              showNotification
-            )
+          // Ẩn dropdown, chỉ hiển thị text cho trạng thái "Hủy đơn hàng" (4) và "Chưa thanh toán" (6)
+          if (params.value === 4 || params.value === 6) {
+              return (
+                  <Typography
+                      sx={{
+                          fontWeight: "bold",
+                          color: "white",
+                          backgroundColor: selectedColor,
+                          padding: "6px 12px",
+                          borderRadius: "5px",
+                          display: "inline-block",
+                      }}
+                  >
+                      {selectedStatus?.label}
+                  </Typography>
+              );
           }
-        >
-          {availableStatusOptions.map((item) => (
-            <MenuItem
-              key={item.value}
-              value={item.value}
-              sx={{
-                backgroundColor:
-                  params.value === item.value ? item.color : "transparent",
-                color: params.value === item.value ? "red" : "white",
-                "&:hover": {
-                  backgroundColor: item.color,
-                  color: "white",
-                },
-              }}
-            >
-              {item.label}
-            </MenuItem>
-          ))}
-        </Select>
-      );
-    },
+
+          // Lọc trạng thái hợp lệ (>= hiện tại, loại bỏ 6 và nếu >1 thì loại 4)
+          let availableStatusOptions = statusOptions.filter(
+              (item) =>
+                  item.value >= params.value &&
+                  item.value !== 6 && // Loại trừ "Chưa thanh toán"
+                  !(params.value > 1 && item.value === 4) // Nếu >1 thì loại 4
+          );
+
+          return (
+              <Select
+                  value={params.value}
+                  variant="filled"
+                  onChange={(event) => {
+                      const newValue = event.target.value;
+                      const statusLabel = statusOptions.find((s) => s.value === newValue)?.label;
+
+                      const confirmChange = window.confirm(
+                          `Bạn có chắc chắn muốn đổi trạng thái thành "${statusLabel}"?`
+                      );
+
+                      if (confirmChange) {
+                          updateStatus(
+                              params.row.id,
+                              newValue,
+                              dispatch,
+                              showNotification
+                          );
+                      }
+                  }}
+                  sx={{
+                      width: "100%",
+                      backgroundColor: selectedColor,
+                      color: "white",
+                      fontWeight: "bold",
+                      borderRadius: 2,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                      "& .MuiSelect-select": {
+                          padding: "10px 14px",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                          border: "none",
+                      },
+                      "&:hover": {
+                          backgroundColor: "#444",
+                      },
+                      "& .MuiSvgIcon-root": {
+                          color: "white",
+                      },
+                  }}
+              >
+                  {availableStatusOptions.map((item) => (
+                      <MenuItem
+                          key={item.value}
+                          value={item.value}
+                          sx={{
+                              backgroundColor:
+                                  params.value === item.value ? item.color : "transparent",
+                              color: params.value === item.value ? "#fff" : "#ddd",
+                              fontWeight: params.value === item.value ? "bold" : "normal",
+                              borderRadius: 1,
+                              transition: "all 0.2s ease",
+                              "&:hover": {
+                                  backgroundColor: item.color,
+                                  color: "white",
+                                  transform: "scale(1.02)",
+                              },
+                          }}
+                      >
+                          {item.label}
+                      </MenuItem>
+                  ))}
+              </Select>
+
+          );
+      }
   },
 ];
 

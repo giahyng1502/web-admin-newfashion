@@ -27,6 +27,8 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
         "Đã giao hàng thành công",
         "Hủy đơn hàng",
         "Hoàn đơn hàng",
+        "Đang chờ người dùng thanh toán bằng momo",
+        "Đã thanh toán thành công bằng momo",
     ];
     const role = [
         "Người dùng",
@@ -51,6 +53,12 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                             <Typography variant="body1">
                                 Khách hàng: {order.customer}
                             </Typography>
+                            <Typography variant="body1">
+                                Số điện thoại: {order.phoneNumber}
+                            </Typography>
+                            <Typography variant="body1">
+                                Phương thức thanh toán: {order?.paymentMethod?.toUpperCase()}
+                            </Typography>
                             <Typography variant="body1" gutterBottom>
                                 Địa chỉ giao hàng: {order.shippingAddress}
                             </Typography>
@@ -60,35 +68,6 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                             <Typography variant="h5" gutterBottom>
                                 Sản phẩm trong đơn hàng:
                             </Typography>
-                            {/*<List>*/}
-                            {/*    {order.item &&*/}
-                            {/*        order.item.length > 0 &&*/}
-                            {/*        order.item.map((item, index) => (*/}
-                            {/*            <ListItem key={index} alignItems="center">*/}
-                            {/*                <ListItemAvatar sx={{ mr: 2 }}>*/}
-                            {/*                    <Avatar*/}
-                            {/*                        src={item.color.imageColor || "/no-image.png"}*/}
-                            {/*                        variant="rounded"*/}
-                            {/*                        sx={{ width: 80, height: 80 }}*/}
-                            {/*                    />*/}
-                            {/*                </ListItemAvatar>*/}
-                            {/*                <ListItemText*/}
-                            {/*                    primary={item.productName}*/}
-                            {/*                    secondary={*/}
-                            {/*                        <>*/}
-                            {/*                            <Typography component="span">*/}
-                            {/*                                Màu: {item.color.nameColor}, Kích thước: {item.size}*/}
-                            {/*                            </Typography>*/}
-                            {/*                            <br />*/}
-                            {/*                            <Typography component="span">*/}
-                            {/*                                Số lượng: {item.quantity} | Giá: {utilVietnamDong(item.price)}*/}
-                            {/*                            </Typography>*/}
-                            {/*                        </>*/}
-                            {/*                    }*/}
-                            {/*                />*/}
-                            {/*            </ListItem>*/}
-                            {/*        ))}*/}
-                            {/*</List>*/}
                             <OrderItemsTable order={order}/>
                             <Divider sx={{ my: 2 }} />
 
@@ -116,6 +95,18 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                             </List>
 
                             <Divider sx={{ my: 2 }} />
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giá gốc: {utilVietnamDong(order.originalPrice)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá khuyến mãi voucher: {utilVietnamDong(order.totalVoucherDiscount)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá từ sản phẩm: {utilVietnamDong(order.totalDiscountSale)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá từ điểm tiêu dùng: {utilVietnamDong(order.point)}
+                            </Typography>
                             <Typography variant="h5" color={colors.redAccent[500]}>
                                 Tổng tiền: {utilVietnamDong(order.totalPrice)}
                             </Typography>

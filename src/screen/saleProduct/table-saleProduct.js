@@ -187,8 +187,8 @@ export default function TableSaleProduct({
       />
       <Paper
         sx={{
-          height: "500px",
-          width: "90%",
+          height: "80vh",
+          width: "96%",
           maxWidth: "1200px",
           padding: 4,
           backgroundColor: colors.primary[400],

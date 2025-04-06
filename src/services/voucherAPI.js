@@ -4,7 +4,7 @@ const API_URL = "/voucher";
 
 const voucherAPI = {
   getAll: async () => {
-    const response = await axios.get(`${API_URL}/getall`);
+    const response = await axios.get(`${API_URL}/getAllVoucher`);
     return response.data;
   },
 

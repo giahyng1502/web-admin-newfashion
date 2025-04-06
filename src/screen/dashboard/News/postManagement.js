@@ -135,12 +135,12 @@ export default function PostTable({
   return (
     <Paper
       sx={{
-        height: "80vh",
-        width: "100%",
-        maxWidth: "1600px",
-        padding: 4,
-        background: colors.primary[400],
-        margin: "auto",
+            height: "80vh",
+            width: "96%",
+            maxWidth: "1200px",
+            padding: 4,
+            background: colors.primary[400],
+            margin: "auto",
       }}
     >
       <Box display="flex" justifyContent="space-between" width="100%">
