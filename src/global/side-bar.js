@@ -108,13 +108,40 @@ const MySidebar = () => {
         <SidebarItem
           colors={colors}
           title="Thống Kê"
-          to="/"
+          to="/statistics"
           icon={<AssessmentOutlined />}
           selected={selected}
           setSelected={(title) => {
             setSelected(title);
-            setPageTitle(title); // Cập nhật tiêu đề khi chọn
+            setPageTitle(title);
           }}
+          children={[
+            {
+              title: "Doanh Thu",
+              to: "/statistics",
+              icon: <AssessmentOutlined />,
+            },
+            {
+              title: "Đơn Hàng",
+              to: "/statistics/order",
+              icon: <ReceiptLongOutlined />,
+            },
+            {
+              title: "Top 5 Sản Phẩm Bán Chạy Nhất",
+              to: "/statistics/product",
+              icon: <Inventory2Outlined />,
+            },
+            {
+              title: "Người Dùng",
+              to: "/statistics/user",
+              icon: <ManageAccountsRounded />,
+            },
+            {
+              title: "Sản Phẩm Sắp Hết Hàng",
+              to: "/statistics/low-product",
+              icon: <Inventory2Outlined />,
+            },
+          ]}
         />
 
         <SidebarItem
