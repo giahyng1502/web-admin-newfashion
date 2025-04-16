@@ -38,11 +38,12 @@ const handleRoleChange = async (
     }
   } catch (error) {
     showNotification("Lỗi khi cập nhật quyền", "error");
+    console.log(error)
   }
 };
 
 const getColumns = (dispatch, showNotification) => [
-  { field: "_id", headerName: "ID", width: 80 },
+  { field: "_id", headerName: "ID", width: 150 },
   {
     field: "createdAt",
     headerName: "Ngày tạo",
@@ -79,8 +80,7 @@ const getColumns = (dispatch, showNotification) => [
     ),
   },
   { field: "email", headerName: "Email", width: 200 },
-  { field: "point", headerName: "Điểm thưởng", width: 100, editable: true },
-  { field: "balance", headerName: "Số dư", width: 100, editable: true },
+  { field: "point", headerName: "Điểm thưởng", width: 150, editable: true },
   {
     field: "role",
     headerName: "Vai trò",
