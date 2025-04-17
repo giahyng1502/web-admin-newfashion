@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://160.191.245.3:3000/'
+    baseURL: 'https://api.hungcy.id.vn'
     // baseURL: 'http://localhost:3000'
 });
 
