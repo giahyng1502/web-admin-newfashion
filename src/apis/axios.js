@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://backend-newfashion-328609313507.asia-southeast1.run.app'
-    // baseURL: 'http://localhost:3000'
+    // baseURL: 'https://backend-newfashion-328609313507.asia-southeast1.run.app'
+    baseURL: 'https://api.hungcy.id.vn'
 });
 
 // Thêm interceptor để tự động chèn token vào mỗi reque
