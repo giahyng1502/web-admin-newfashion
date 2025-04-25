@@ -20,7 +20,7 @@ const userReducer = createSlice({
       state.data = state.data.filter((user) => user._id !== action.payload);
     },
     updateUser: (state, action) => {
-      state.data = state.data.map((user) =>
+      state.users = state.users.map((user) =>
         user._id === action.payload._id ? { ...user, ...action.payload } : user
       );
     },
