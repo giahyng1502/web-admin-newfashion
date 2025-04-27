@@ -10,14 +10,14 @@ import {
     Button, IconButton,
 } from "@mui/material";
 import axios from "../../apis/axios";
-import {DeleteOutline, UpdateOutlined} from "@mui/icons-material";
+import { DeleteOutline, Edit, UpdateOutlined } from "@mui/icons-material";
 import ConfirmDelete from "../../dialogs/comfirm-delete";
-import {useNotification} from "../../snackbar/NotificationContext";
+import { useNotification } from "../../snackbar/NotificationContext";
 import UpdateSubCategory from "../../dialogs/update-sub-category";
 import UpdateCategory from "../../dialogs/update-category";
-import {add, addCategory, deleteCate, update} from "../../redux/reducer/categoryReducer";
+import { add, addCategory, deleteCate, update } from "../../redux/reducer/categoryReducer";
 
-const CategoryList = ({ colors, categories ,dispatch}) => {
+const CategoryList = ({ colors, categories, dispatch }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const [category, setCategory] = useState(null);
@@ -47,13 +47,26 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
         setSubCateToUpdate(subCate);
         setOpenUpdateDialog(true);
     };
-    const handleAddCategory = async (category,files)=> {
-        const check = await addCategory(category,files);
-            showNotification(check.message,check.type);
-            setOpenAddDialog(false)
-            if (check.type === 'success') {
-                dispatch(add(check.data))
-            }
+    const handleAddCategory = async (category, files) => {
+        console.log("category", category);
+        console.log("files", files);
+
+        if (!category || category.categoryName.trim() === "") {
+            showNotification("Tên danh mục không được để trống", "error");
+            return;
+        }
+
+        if (!files) {
+            showNotification("Vui lòng chọn ít nhất một tệp hình ảnh", "error");
+            return;
+        }
+
+        const check = await addCategory(category, files);
+        showNotification(check.message, check.type);
+        setOpenAddDialog(false)
+        if (check.type === 'success') {
+            dispatch(add(check.data))
+        }
     }
     const handleAddCate = () => {
         setOpenAddDialog(true);
@@ -61,12 +74,12 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
     const handleAddSubCate = () => {
         setOpenAddSubDialog(true);
     };
-    const handleUpdateSubCategory = async (file,type) => {
+    const handleUpdateSubCategory = async (file, type) => {
         if (!subCateToUpdate) return;
 
         const formData = new FormData();
         formData.append("subCateName", subCateToUpdate.subCateName);
-        formData.append("categoryId",selectedCategory._id);
+        formData.append("categoryId", selectedCategory._id);
         if (file) formData.append("files", file);
 
         try {
@@ -75,7 +88,7 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
                 if (res.status === 200) {
-                    showNotification('Sửa danh mục sản phẩm thành công','success');
+                    showNotification('Sửa danh mục sản phẩm thành công', 'success');
                     getSubCategories(); // Load lại danh sách
                 }
             }
@@ -84,14 +97,14 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
                 if (res.status === 200) {
-                    showNotification('Thêm danh mục sản phẩm thành công','success');
+                    showNotification('Thêm danh mục sản phẩm thành công', 'success');
                     getSubCategories(); // Load lại danh sách
                 }
             }
 
         } catch (error) {
             console.log(error);
-            showNotification('Sửa danh mục sản phẩm thất bại','error');
+            showNotification('Sửa danh mục sản phẩm thất bại', 'error');
         }
         setOpenUpdateDialog(false);
     };
@@ -123,8 +136,12 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
                 setOpenDeleteDialogCate(false);
             }
         } catch (error) {
-            console.log(error);
-            showNotification(error.toString(), 'error');
+            console.log('hihi');
+            if (error.response.status === 400) {
+                showNotification('Bạn vui lòng xóa hết danh mục con tồn tại trong danh mục này', 'error');
+            } else {
+                showNotification('Xóa danh mục sản phẩm thất bại', 'error');
+            }
 
         }
         setOpenDeleteDialog(false);
@@ -133,20 +150,20 @@ const CategoryList = ({ colors, categories ,dispatch}) => {
     const handlOpenMoDalCategory = () => {
         setOpenUpdateDialogCate(true);
     };
-const handleUpdateCate =async ()=> {
-    try {
-        const res = await axios.put(`category/${selectedCategory._id}`,{
-            categoryName: selectedCategory.categoryName,
-        });
-        if (res.status === 200) {
-            showNotification('Sửa danh mục thể loại sản phẩm thành công', 'success');
-            dispatch(update(res.data.data))
-            setOpenUpdateDialogCate(false);
+    const handleUpdateCate = async () => {
+        try {
+            const res = await axios.put(`category/${selectedCategory._id}`, {
+                categoryName: selectedCategory.categoryName,
+            });
+            if (res.status === 200) {
+                showNotification('Sửa danh mục thể loại sản phẩm thành công', 'success');
+                dispatch(update(res.data.data))
+                setOpenUpdateDialogCate(false);
+            }
+        } catch (err) {
+            console.log(err);
         }
-    }catch(err) {
-        console.log(err);
     }
-}
 
     const getSubCategories = async () => {
         if (!selectedCategory) return;
@@ -220,7 +237,7 @@ const handleUpdateCate =async ()=> {
             />
             {/* Cột trái - Danh mục chính */}
             <Grid item xs={4}>
-                <Button variant={'contained'} sx={{background : colors.blueAccent[400],mb : 1}} onClick={()=> {
+                <Button variant={'contained'} sx={{ background: colors.blueAccent[400], mb: 1 }} onClick={() => {
                     handleAddCate();
                 }}>
                     Thêm Danh Mục Thể loại
@@ -246,7 +263,7 @@ const handleUpdateCate =async ()=> {
                                 display: "flex",
                                 alignItems: "center",
                                 padding: 1,
-                                position : 'relative',
+                                position: 'relative',
                                 justifyContent: "start",
                                 marginBottom: "10px",
                                 bgcolor: selectedCategory?._id === category._id ? "#1976d2" : colors.primary[400],
@@ -284,7 +301,7 @@ const handleUpdateCate =async ()=> {
                                         size="small"
                                         onClick={() => handlOpenMoDalCategory()}
                                     >
-                                        <UpdateOutlined/>
+                                        <Edit />
                                     </IconButton>
                                     <IconButton
                                         variant="contained"
@@ -292,7 +309,7 @@ const handleUpdateCate =async ()=> {
                                         color={'error'}
                                         onClick={() => handleDeleteClickCate()}
                                     >
-                                        <DeleteOutline/>
+                                        <DeleteOutline />
                                     </IconButton>
                                 </Box>
                             )}
@@ -304,7 +321,7 @@ const handleUpdateCate =async ()=> {
 
             {/* Cột phải - Danh mục con */}
             <Grid item xs={8}>
-                <Button variant={'contained'} sx={{background : colors.blueAccent[400],mb : 1}} onClick={()=> {
+                <Button variant={'contained'} sx={{ background: colors.blueAccent[400], mb: 1 }} onClick={() => {
                     handleAddSubCate();
                 }}>
                     Thêm Danh Mục Sản Phẩm
@@ -322,7 +339,7 @@ const handleUpdateCate =async ()=> {
                     }}
                 >
 
-                {selectedCategory ? (
+                    {selectedCategory ? (
                         <Grid container spacing={2}>
                             {subcate?.map((sub, index) => (
                                 <Grid item xs={4} key={index}>
@@ -373,22 +390,22 @@ const handleUpdateCate =async ()=> {
                                                 }}
                                             >
                                                 <Button
-                                                    sx={{flex : 1}}
+                                                    sx={{ flex: 1 }}
                                                     variant="contained"
                                                     color="error"
                                                     size="small"
                                                     onClick={() => handleDeleteClick(sub._id)}
                                                 >
-                                                    <DeleteOutline/>
+                                                    <DeleteOutline />
                                                 </Button>
                                                 <Button
-                                                    sx={{flex : 1}}
+                                                    sx={{ flex: 1 }}
                                                     variant="contained"
                                                     color="primary"
                                                     size="small"
                                                     onClick={() => handleUpdateClick(sub)}
                                                 >
-                                                    <UpdateOutlined/>
+                                                    <Edit />
                                                 </Button>
                                             </Box>
                                         )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "../../apis/axios";
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
+    Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 import {
     Box,
@@ -9,14 +9,7 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     CircularProgress,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    TableContainer,
-    TableHead,
     Paper,
-    Avatar,
     Grid
 } from '@mui/material';
 
@@ -62,14 +55,6 @@ const StatisticsUser = () => {
         return (
             <Box sx={{ p: 4 }}>
                 <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (!loadingUserStat && !statsData) {
-        return (
-            <Box sx={{ p: 4 }}>
-                <Typography color="error">Không thể tải dữ liệu thống kê người dùng.</Typography>
             </Box>
         );
     }
@@ -129,7 +114,14 @@ const StatisticsUser = () => {
                         </Grid>
                     </Grid>
                 ) : (
-                    <Typography>Không có dữ liệu</Typography>
+                    <>
+                        <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                            Không có dữ liệu thống kê cho khoảng thời gian này.
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#888' }}>
+                            Vui lòng chọn khoảng thời gian khác.
+                        </Typography>
+                    </>
                 )}
             </Box>
         </Box>

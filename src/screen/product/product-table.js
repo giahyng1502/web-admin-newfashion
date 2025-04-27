@@ -44,6 +44,8 @@ export default function ProductTable({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [value, setValue] = useState("");
   const [saleProductSelected, setSaleProductSelected] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   const handleOpenDialog = async (product) => {
     try {
@@ -72,6 +74,11 @@ export default function ProductTable({
         return oldRow;
       }
 
+      const isConfirmed = window.confirm("Bạn có chắc chắn muốn thay đổi dữ liệu này?");
+      if (!isConfirmed) {
+        return oldRow; // Hủy thay đổi nếu người dùng không xác nhận
+      }
+
       const updatedData = changedFields.reduce((acc, key) => {
         acc[key] = newRow[key];
         return acc;
@@ -98,7 +105,15 @@ export default function ProductTable({
     }
     return oldRow;
   };
+
   const addSaleProduct = async (product) => {
+    console.log(product);
+    // {productId: '67c33770a7ef3a7e643f3639', discount: 0, expireAt: 0, limit: 0}
+    if (!product.discount || !product.expireAt || !product.limit) {
+      showNotification("Vui lòng nhập đầy đủ thông tin", "error");
+      return;
+    }
+
     try {
       const res = await axios.post(`saleProduct/add`, product);
       if (res.status === 201) {
@@ -337,14 +352,6 @@ export default function ProductTable({
             </IconButton>
           </Box>
           <Box>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpenAddUser}
-              sx={{ marginBottom: 2, marginRight: 2 }}
-            >
-              Thêm sản phẩm
-            </Button>
             <Button
               variant="contained"
               color="primary"

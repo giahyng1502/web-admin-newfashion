@@ -47,6 +47,18 @@ const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
   };
 
   const handleSubmit = async () => {
+    if (
+      !voucherData.voucherName ||
+      !voucherData.voucherDetail ||
+      !voucherData.limit ||
+      !voucherData.startDate ||
+      !voucherData.endDate ||
+      !voucherData.discount
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
     try {
       if (!voucherData._id) {
         alert("Lỗi: Không tìm thấy ID của voucher!");

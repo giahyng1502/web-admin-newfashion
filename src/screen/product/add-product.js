@@ -149,6 +149,8 @@ function AddProduct() {
   const uploadProduct = async () => {
     if (!validateForm()) return;
     try {
+      console.log(product);
+
       await axios.post("/addProduct", product);
       setDialogContent("Sản phẩm đã được thêm thành công!");
     } catch (err) {
@@ -321,16 +323,17 @@ function AddProduct() {
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField
-              label="Size cách nhau bởi dấu ,"
-              variant="outlined"
-              value={product.size}
-              onChange={(e) => setProduct({ ...product, size: e.target.value })}
-              size="medium"
-              fullWidth
-              multiline
-              color="secondary"
-              sx={{ marginBottom: 2 }}
+            <Autocomplete
+              multiple
+              options={["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"]}
+              value={product.size ? product.size.split(",").map((size) => size.trim()) : []} // Chuyển chuỗi thành mảng hoặc để []
+              onChange={(e, value) => {
+                const sizeString = value.join(","); // Chuyển mảng thành chuỗi cách nhau bởi dấu phẩy
+                setProduct({ ...product, size: sizeString }); // Gán chuỗi vào trường size
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Chọn size" variant="outlined" color="secondary" />
+              )}
             />
           </Grid>
           <Grid item xs={2}>
@@ -340,7 +343,7 @@ function AddProduct() {
               }}
               variant="contained"
             >
-              Description
+              Mô tả
             </Button>
           </Grid>
 

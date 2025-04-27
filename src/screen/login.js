@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -18,6 +18,7 @@ import {
 import { tokens } from "../theme";
 import { useNotification } from "../snackbar/NotificationContext";
 import axios from "../apis/axios";
+import { PageTitleContext } from "../context/PageTitleContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -28,8 +29,20 @@ const Login = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const showNotification = useNotification();
+  const {setPageTitle} = useContext(PageTitleContext); // Lấy hàm setPageTitle từ context
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      showNotification("Vui lòng nhập đầy đủ email và mật khẩu", "error");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showNotification("Email không hợp lệ", "error");
+      return;
+    }
+
     dispatch(loginStart()); // Bắt đầu loading
     try {
       const res = await axios.post("/users/login", {
@@ -42,7 +55,8 @@ const Login = () => {
         dispatch(loginSuccess(res.data));
         console.log(res.data);
         navigate("/product");
-      } else {
+        setPageTitle("Danh Sách Sản phẩm"); // Đặt tiêu đề trang sau khi đăng nhập thành công
+      } else {        
         showNotification(
           "Thông tin tài khoản hoặc mật khẩu không chính xác",
           "error"
@@ -50,9 +64,19 @@ const Login = () => {
         dispatch(loginFailure());
       }
     } catch (e) {
-      showNotification("Lỗi server", "error");
+      if (e.response) {
+        if (e.response.status === 401) {
+          showNotification("Thông tin tài khoản hoặc mật khẩu không chính xác", "error");
+        } else if (e.response.status === 404) {
+          showNotification("Tài khoản không tồn tại", "error");
+        } else {
+          showNotification("Lỗi server", "error");
+        }
+      } else {
+        showNotification("Không thể kết nối đến server", "error");
+      }
       dispatch(loginFailure());
-      console.log("Lỗi: ", e);
+      console.log("Lỗi: ", e.response ? e.response.status : e.message);
     }
   };
 

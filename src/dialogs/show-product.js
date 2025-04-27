@@ -54,6 +54,11 @@ const ProductDialog = ({
   }, [product]);
 
   const updateProduct2 = async () => {
+    if (images.length === 0 || colorImages.length === 0) {
+      showNotification("Vui lòng chọn ảnh sản phẩm và màu sắc", "error");
+      return;
+    }
+
     try {
       const res = await axios.put(`/updateProduct/${product._id}`, {
         image: images,
@@ -122,11 +127,16 @@ const ProductDialog = ({
   // Thêm màu sắc mới
   const handleAddColor = () => {
     if (newColor.nameColor && newColor.imageColor) {
+      console.log("hihi");
+      
       setColorImages((prev) => [
         ...prev,
         { ...newColor, _id: new ObjectId().toString() },
       ]);
       setNewColor({ nameColor: "", imageColor: null });
+    } else {   
+      console.log("haha");   
+      showNotification("Vui lòng nhập tên màu và chọn ảnh", "error");
     }
   };
   const handleConfirmDelete = (index, type) => {
@@ -317,7 +327,7 @@ const ProductDialog = ({
               color="primary"
               variant="contained"
             >
-              Cập nhập
+              Cập nhật
             </Button>
           </DialogActions>
         </div>

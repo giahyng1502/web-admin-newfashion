@@ -54,6 +54,29 @@ function DescriptionDialog({ open, onClose,onSave }) {
         onSave(product); // Gửi data về component cha
         onClose(); // Đóng Dialog
     };
+
+    function convertKeyToLabel(key) {
+        const keyToVietnamese = {
+            material: "Chất liệu",
+            composition: "Thành phần",
+            sleeveLength: "Độ dài tay áo",
+            pattern: "Họa tiết",
+            applicablePeople: "Đối tượng sử dụng",
+            sheer: "Độ xuyên thấu",
+            type: "Loại sản phẩm",
+            season: "Mùa",
+            operationInstruction: "Hướng dẫn sử dụng",
+            style: "Phong cách",
+            fabricElasticity: "Độ co giãn vải",
+            weavingMethod: "Phương pháp dệt",
+            origin: "Xuất xứ",
+        };
+    
+        return keyToVietnamese[key] || key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase());
+    }
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
             <DialogTitle>Thông Tin Sản Phẩm</DialogTitle>
@@ -71,7 +94,7 @@ function DescriptionDialog({ open, onClose,onSave }) {
                                             value={product[key] || []}
                                             onChange={(e, value) => handleChange(key, value)}
                                             renderInput={(params) => (
-                                                <TextField {...params} label={key} variant="outlined" />
+                                                <TextField {...params} label={convertKeyToLabel(key)} variant="outlined" />
                                             )}
                                         />
                                     ) : (
@@ -81,7 +104,7 @@ function DescriptionDialog({ open, onClose,onSave }) {
                                             value={product[key] || ""}
                                             onChange={(e, value) => handleChange(key, value)}
                                             renderInput={(params) => (
-                                                <TextField {...params} label={key} variant="outlined" />
+                                                <TextField {...params} label={convertKeyToLabel(key)} variant="outlined" />
                                             )}
                                         />
                                     )}

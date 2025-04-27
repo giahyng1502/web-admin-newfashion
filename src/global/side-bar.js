@@ -127,7 +127,7 @@ const MySidebar = () => {
               icon: <ReceiptLongOutlined />,
             },
             {
-              title: "Top 5 Sản Phẩm Bán Chạy Nhất",
+              title: "Top Sản Phẩm Bán Chạy Nhất",
               to: "/statistics/product",
               icon: <Inventory2Outlined />,
             },
@@ -169,7 +169,7 @@ const MySidebar = () => {
         />
         <SidebarItem
           colors={colors}
-          title="Sản phẩm khuyễn mãi"
+          title="Sản phẩm khuyến mãi"
           to="/saleProduct"
           icon={<DiscountOutlined />}
           selected={selected}

@@ -46,6 +46,14 @@ export default function TableSaleProduct({
         return oldRow;
       }
 
+      const isConfirmed = window.confirm(
+        "Bạn có chắc chắn muốn cập nhật số liệu này không?"
+      );
+
+      if (!isConfirmed) {
+        return oldRow;
+      }
+
       const updatedData = changedFields.reduce((acc, key) => {
         acc[key] = newRow[key];
         return acc;
@@ -201,14 +209,6 @@ export default function TableSaleProduct({
         }}
       >
         <Box display="flex" justifyContent="space-between" width="100%">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenAddUser}
-            sx={{ marginBottom: 2 }}
-          >
-            Thêm sản phẩm
-          </Button>
           <Button
             variant="contained"
             color="primary"

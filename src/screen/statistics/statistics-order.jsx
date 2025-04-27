@@ -50,10 +50,6 @@ const StatisticsOrder = () => {
         );
     }
 
-    if (!loadingOrderStat && !orderStats) {
-        return <Typography color="error">Không thể tải dữ liệu thống kê đơn hàng.</Typography>;
-    }
-
     return (
         <Box sx={{ p: 4 }}>
             <ToggleButtonGroup
@@ -67,60 +63,71 @@ const StatisticsOrder = () => {
                 <ToggleButton value="year">Năm</ToggleButton>
             </ToggleButtonGroup>
 
-            {orderStats && (
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>Tổng đơn</TableCell>
-                            <TableCell>{orderStats.totalOrders}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Đơn đang chờ</TableCell>
-                            <TableCell>{orderStats.stats.pending}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Đơn đang giao</TableCell>
-                            <TableCell>{orderStats.stats.shipping}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Đã giao</TableCell>
-                            <TableCell>{orderStats.stats.delivered}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Đã huỷ</TableCell>
-                            <TableCell>{orderStats.stats.canceled}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Hoàn trả</TableCell>
-                            <TableCell>{orderStats.stats.returned}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Tỉ lệ thành công</TableCell>
-                            <TableCell>{orderStats.successRate}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Tỉ lệ huỷ</TableCell>
-                            <TableCell>{orderStats.cancelRate}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            )}
+            {(orderStats === null || orderStats.length === 0) ?
+                (
+                    <>
+                        <Typography variant="subtitle2" sx={{ mb: 2 }}>
+                            Không có dữ liệu thống kê cho khoảng thời gian này.
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#888' }}>
+                            Vui lòng chọn khoảng thời gian khác.
+                        </Typography>
+                    </>
+                )
+                : (
+                    <Table>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Tổng đơn</TableCell>
+                                <TableCell>{orderStats.totalOrders}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Đơn đang chờ</TableCell>
+                                <TableCell>{orderStats.stats.pending}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Đơn đang giao</TableCell>
+                                <TableCell>{orderStats.stats.shipping}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Đã giao</TableCell>
+                                <TableCell>{orderStats.stats.delivered}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Đã huỷ</TableCell>
+                                <TableCell>{orderStats.stats.canceled}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Hoàn trả</TableCell>
+                                <TableCell>{orderStats.stats.returned}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Tỉ lệ thành công</TableCell>
+                                <TableCell>{orderStats.successRate}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Tỉ lệ huỷ</TableCell>
+                                <TableCell>{orderStats.cancelRate}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                )}
         </Box>
     );
 };

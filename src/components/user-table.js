@@ -139,6 +139,15 @@ export default function DataTable({
         showNotification("Không có dữ liệu nào thay đổi", "error");
         return oldRow;
       }
+
+      const isConfirmed = window.confirm(
+        "Bạn có chắc chắn muốn cập nhật số liệu này không?"
+      );
+
+      if (!isConfirmed) {
+        return oldRow;
+      }
+
       const updatedData = changedFields.reduce((acc, key) => {
         acc[key] = newRow[key];
         return acc;
