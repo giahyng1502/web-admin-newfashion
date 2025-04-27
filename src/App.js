@@ -36,7 +36,7 @@ function App() {
                                 path="/*"
                                 element={
                                     <PrivateRoute>
-                                        <MySidebar />
+                                        <MySidebar className="sidebar" />
                                         <main className="content">
                                             <TopBar />
                                             <Routes>
@@ -65,5 +65,7 @@ function App() {
         </NotificationProvider>
     );
 }
+
+
 
 export default App;

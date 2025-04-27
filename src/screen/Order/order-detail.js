@@ -71,6 +71,24 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                             <OrderItemsTable order={order}/>
                             <Divider sx={{ my: 2 }} />
 
+                            
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giá gốc: {utilVietnamDong(order.originalPrice)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá khuyến mãi voucher: {utilVietnamDong(order.totalVoucherDiscount)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá từ sản phẩm: {utilVietnamDong(order.totalDiscountSale)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Giảm giá từ điểm tiêu dùng: {utilVietnamDong(order.point)}
+                            </Typography>
+                            <Typography variant="h5" color={colors.redAccent[500]}>
+                                Tổng tiền: {utilVietnamDong(order.totalPrice)}
+                            </Typography>
+
+                            <Divider sx={{ my: 2 }} />
                             {/* Lịch sử trạng thái đơn hàng */}
                             <Typography variant="h5" gutterBottom>
                                 Lịch sử trạng thái:
@@ -94,22 +112,7 @@ const OrderDetail = ({ open, setOpen, order, colors }) => {
                                     ))}
                             </List>
 
-                            <Divider sx={{ my: 2 }} />
-                            <Typography variant="h5" color={colors.redAccent[500]}>
-                                Giá gốc: {utilVietnamDong(order.originalPrice)}
-                            </Typography>
-                            <Typography variant="h5" color={colors.redAccent[500]}>
-                                Giảm giá khuyến mãi voucher: {utilVietnamDong(order.totalVoucherDiscount)}
-                            </Typography>
-                            <Typography variant="h5" color={colors.redAccent[500]}>
-                                Giảm giá từ sản phẩm: {utilVietnamDong(order.totalDiscountSale)}
-                            </Typography>
-                            <Typography variant="h5" color={colors.redAccent[500]}>
-                                Giảm giá từ điểm tiêu dùng: {utilVietnamDong(order.point)}
-                            </Typography>
-                            <Typography variant="h5" color={colors.redAccent[500]}>
-                                Tổng tiền: {utilVietnamDong(order.totalPrice)}
-                            </Typography>
+                            
                         </Box>
                     ) : (
                         <Typography>Không có dữ liệu</Typography>

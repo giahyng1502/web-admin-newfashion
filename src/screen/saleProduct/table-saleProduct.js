@@ -98,7 +98,6 @@ export default function TableSaleProduct({
       field: "name",
       headerName: "Tên sản phẩm",
       width: 380,
-      editable: true,
       renderCell: (params) => (
         <Box sx={{ whiteSpace: "pre-wrap", wordWrap: "break-word", p: 1 }}>
           <Typography>{params.value}</Typography>

@@ -16,6 +16,21 @@ body,
   position: relative;
 }
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #fff;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.content {
+  overflow-y: auto;
+  height: 100vh;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

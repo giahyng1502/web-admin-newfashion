@@ -72,12 +72,7 @@ function TopBar() {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
+        
         <IconButton onClick={handleClick}>
           <img
             style={{ width: 25, borderRadius: 50 }}
