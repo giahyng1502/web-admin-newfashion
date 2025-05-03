@@ -20,6 +20,7 @@ import StatisticsOrder from "./screen/statistics/statistics-order";
 import StatisticsTopProduct from "./screen/statistics/statistics-top-product";
 import StatisticsUser from "./screen/statistics/statistics-user";
 import StatisticsLowProduct from "./screen/statistics/statistics-low-product";
+import BannerManager from "./screen/banner/banner";
 
 function App() {
     const [theme, colorMode] = useMode();
@@ -53,6 +54,7 @@ function App() {
                                                 <Route path="/orders" element={<Order />} />
                                                 <Route path="/news" element={<News />} />
                                                 <Route path="/voucher" element={<Voucher />} />
+                                                <Route path="/banner" element={<BannerManager />} />
                                             </Routes>
                                         </main>
                                     </PrivateRoute>

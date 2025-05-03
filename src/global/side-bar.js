@@ -234,6 +234,18 @@ const MySidebar = () => {
             setPageTitle(title); // Cập nhật tiêu đề khi chọn
           }}
         />
+
+          <SidebarItem
+              colors={colors}
+              title="Quản lý banner"
+              to="/banner"
+              icon={<ConfirmationNumberOutlined />}
+              selected={selected}
+              setSelected={(title) => {
+                  setSelected(title);
+                  setPageTitle(title);
+              }}
+          />
       </Menu>
     </Sidebar>
   );
