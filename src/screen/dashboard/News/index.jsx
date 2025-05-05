@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import PostTable from "./postManagement";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts } from "../../../redux/post/postActions";
+import { formatDateTime } from "../../../utils/dateUtils";
 
 export default function News() {
   const [page, setPage] = useState(0);
@@ -11,17 +12,17 @@ export default function News() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllPosts());
-  }, [dispatch]);
+    dispatch(getAllPosts({ page, pageSize }));
+  }, [dispatch, page, pageSize]);
 
   const rows = posts.map((post) => ({
     ...post,
     user: post.user.name,
-    createdAt: new Date(post.createdAt).toLocaleString(),
+    createdAt: formatDateTime(post.createdAt),
   }));
 
   const handleRefreshPosts = () => {
-    dispatch(getAllPosts());
+    dispatch(getAllPosts({ page, pageSize }));
   };
 
   return (

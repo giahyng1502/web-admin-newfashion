@@ -1,0 +1,109 @@
+.dark-quill {
+  border: none;
+  white-space: pre-wrap;
+  border-radius: 6px;
+  padding: 12px;
+
+  .ql-container.ql-snow,
+  .ql-toolbar.ql-snow {
+    border: none;
+    background: transparent;
+  }
+
+  // Style cho toolbar
+  .ql-toolbar.ql-snow {
+    background-color: #333; // Màu nền toolbar
+
+    // Style cho các nút trong toolbar
+    .ql-formats {
+      button {
+        color: #fff; // Màu chữ/biểu tượng
+        &:hover {
+          color: #ccc;
+        }
+        &.ql-active {
+          color: #37a3ff;
+        }
+      }
+    }
+
+    // Style cho icon các phần tử vector (sử dụng SVG)
+    .ql-stroke {
+      stroke: #fff;
+    }
+
+    // Style cho pickers (dropdown)
+    .ql-picker {
+      .ql-picker-label {
+        color: #fff;
+        &:hover {
+          color: #ccc;
+        }
+        &.ql-active {
+          color: #37a3ff;
+        }
+      }
+      .ql-picker-options {
+        background-color: #333;
+        border: 1px solid #444;
+        color: #fff;
+      }
+    }
+  }
+
+  .ql-container {
+    font-size: 16px;
+    min-height: 50px;
+    padding: 0;
+  }
+
+  .ql-editor {
+    padding: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    &.ql-blank::before {
+      color: #aaa;
+      font-style: normal;
+      content: attr(data-placeholder);
+      position: absolute;
+      top: 6px;
+      left: 0;
+      pointer-events: none;
+    }
+  }
+
+  &.inactive .ql-toolbar {
+    display: none;
+  }
+
+  &.inactive {
+    border: 1px solid #666;
+  }
+
+  .ql-snow {
+    .ql-picker-item[data-value="Inter"]::before,
+    .ql-picker-label[data-value="Inter"]::before {
+      font-family: "Inter", sans-serif;
+      content: "Inter";
+    }
+
+    .ql-font-Inter {
+      font-family: "Inter", sans-serif;
+    }
+  }
+
+  .ql-toolbar.ql-snow {
+    margin-bottom: 12px;
+  }
+
+  .ql-container.ql-snow {
+    padding-top: 8px;
+  }
+
+  .hashtag-custom {
+    display: inline;
+    background-color: #215188;
+    color: white;
+    font-weight: 500;
+  }
+}

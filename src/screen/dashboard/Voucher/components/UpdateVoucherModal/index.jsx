@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Dialog, DialogContent } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { updateVoucher } from "../../redux/voucher/voucherSlice";
-import { useNotify } from "../../hooks/useNotify";
+import { updateVoucher } from "../../../../../redux/voucher/voucherSlice";
+import { useNotify } from "../../../../../hooks/useNotify";
 
 const UpdateVoucherModal = ({ open, handleClose, voucher }) => {
   const [voucherData, setVoucherData] = useState({

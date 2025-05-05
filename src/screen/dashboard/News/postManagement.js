@@ -1,24 +1,19 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  InputBase,
-  Paper,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, IconButton, Paper, useTheme } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { VisibilityOutlined } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { exportToExcel } from "../../../utils/export-excel";
-import AddPostModal from "../../../components/AddPostModal";
-import { useState } from "react";
+import AddPostModal from "./components/AddPostModal";
+import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import UpdatePostModal from "../../../components/UpdatePostModal";
-import PostDetailModal from "../../../components/PostDetailModal";
+import UpdatePostModal from "./components/UpdatePostModal";
+import PostDetailModal from "./components/PostDetailModal";
 import { deletePost, updatePost } from "../../../redux/post/postActions";
 import { useNotify } from "../../../hooks/useNotify";
+import SlateViewer from "./components/SlateEditor/SlateViewer";
+import { convertContent } from "../../../utils/formattingUtils";
 import "./styles.scss";
 
 export default function PostTable({
@@ -40,6 +35,8 @@ export default function PostTable({
   const { deleteSuccess } = useNotify();
   const dispatch = useDispatch();
 
+  const memoizedPost = useMemo(() => selectedPost, [selectedPost?._id]);
+
   const handleDeletePost = (postId) => {
     if (window.confirm("Bạn có chắc muốn xóa bài viết này?")) {
       dispatch(deletePost(postId));
@@ -47,16 +44,64 @@ export default function PostTable({
     }
   };
 
-  const handleUpdatePost = (postId) => {
-    const postIdHasFound = rows.find((p) => p._id === postId);
-    if (postIdHasFound) {
-      setSelectedPost(postIdHasFound);
-      setOpenUpdate(true);
-    }
+  const handleOpenUpdateModal = (id) => {
+    const post = rows.find((p) => p._id === id);
+    if (!post) return;
+    setSelectedPost(post);
+    setOpenUpdate(true);
   };
 
+  const handleOpenDetailModal = (id) => {
+    const post = rows.find((p) => p._id === id);
+    if (!post) return;
+    setSelectedPost(post);
+    setOpenDetail(true);
+  };
+
+  const renderSlateCell = ({ value }) =>
+    typeof value === "string" && /<\/?[a-z]/i.test(value) ? (
+      <div
+        className="post-content"
+        dangerouslySetInnerHTML={{ __html: value }}
+      />
+    ) : (
+      <div className="post-content">
+        <SlateViewer content={convertContent(value)} />
+      </div>
+    );
+
+  const ActionButtons = ({ post, onView, onEdit, onDelete }) => (
+    <Box className="action-container">
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onView(post);
+        }}
+      >
+        <VisibilityOutlined />
+      </IconButton>
+      <IconButton
+        color="success"
+        onClick={(e) => {
+          e.stopPropagation();
+          onEdit(post);
+        }}
+      >
+        <EditIcon />
+      </IconButton>
+      <IconButton
+        color="error"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(post);
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
+    </Box>
+  );
+
   const columns = [
-    { field: "_id", headerName: "ID", width: 180 },
     {
       field: "images",
       headerName: "Hình ảnh",
@@ -81,66 +126,56 @@ export default function PostTable({
       },
       editable: true,
     },
-    { field: "hashtag", headerName: "Nhãn", width: 120, editable: true },
-    { field: "createdAt", headerName: "Ngày tạo", width: 150 },
+    {
+      field: "content",
+      headerName: "Nội dung",
+      width: 420,
+      renderCell: renderSlateCell,
+    },
+    {
+      field: "hashtag",
+      headerName: "Thẻ",
+      width: 100,
+      renderCell: renderSlateCell,
+    },
+    {
+      field: "createdAt",
+      headerName: "Ngày tạo",
+      width: 200,
+      renderCell: renderSlateCell,
+    },
     {
       field: "user",
       headerName: "Người tạo",
-      width: 150,
+      width: 130,
+      renderCell: ({ value }) => {
+        return <div className="post-content">{value || "—"}</div>;
+      },
     },
     {
       field: "actions",
       headerName: " ",
       width: 190,
-      renderCell: ({ id }) => {
-        return (
-          <Box className="action-container">
-            <IconButton
-              color="error"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeletePost(id);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              color="success"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleUpdatePost(id);
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              color="default"
-              onClick={(e) => {
-                e.stopPropagation();
-                const post = rows.find((p) => p._id === id);
-                if (post) {
-                  setSelectedPost(post);
-                  setOpenDetail(true);
-                }
-              }}
-            >
-              <VisibilityOutlined />
-            </IconButton>
-          </Box>
-        );
-      },
+      renderCell: ({ id }) => (
+        <ActionButtons
+          post={id}
+          onDelete={handleDeletePost}
+          onEdit={handleOpenUpdateModal}
+          onView={handleOpenDetailModal}
+        />
+      ),
     },
   ];
 
   return (
     <Paper
       sx={{
-            height: "80vh",
-            width: "96%",
-            maxWidth: "1200px",
-            padding: 4,
-            background: colors.primary[400],
-            margin: "auto",
+        height: "80vh",
+        width: "96%",
+        maxWidth: "1200px",
+        padding: 4,
+        background: colors.primary[400],
+        margin: "auto",
       }}
     >
       <Box display="flex" justifyContent="space-between" width="100%">
@@ -174,7 +209,7 @@ export default function PostTable({
         hideFooterSelectedRowCount={true}
         loading={isLoading}
         rowCount={rows.length > 0 ? rowCount : 0}
-        rowHeight={100}
+        getRowHeight={() => "auto"}
         getRowId={(row) => row._id || row.index}
         pageSizeOptions={[5, 10, 20, 50, 100]}
         paginationModel={{ page, pageSize }}
@@ -200,8 +235,6 @@ export default function PostTable({
             position: "relative",
             overflow: "visible",
             "& .action-container": {
-              position: "absolute",
-              right: 670,
               gap: 2,
               opacity: 0,
               transition: "opacity 0.2s ease-in-out",
@@ -215,18 +248,24 @@ export default function PostTable({
       <UpdatePostModal
         open={openUpdate}
         handleClose={() => setOpenUpdate(false)}
-        post={selectedPost || {}}
-        onUpdate={(updatedPost) => {
-          dispatch(
-            updatePost({ postId: updatedPost._id, postData: updatedPost })
-          );
-          setOpenUpdate(false);
+        post={memoizedPost}
+        onUpdate={async (updatedPost) => {
+          if (!updatedPost) return;
+          try {
+            await dispatch(
+              updatePost({ postId: updatedPost._id, postData: updatedPost })
+            ).unwrap();
+            await onRefresh();
+            setOpenUpdate(false);
+          } catch (error) {
+            console.error("Error updating post:", error);
+          }
         }}
       />
       <PostDetailModal
         open={openDetail}
         handleClose={() => setOpenDetail(false)}
-        post={selectedPost || {}}
+        post={memoizedPost}
       />
     </Paper>
   );

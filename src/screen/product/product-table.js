@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { AddCircleRounded, EditNoteOutlined } from "@mui/icons-material";
 import { utilVietnamDong } from "../../utils/util-vietnam-dong";
 import ProductDialog from "../../dialogs/show-product";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, useGridApiRef } from "@mui/x-data-grid";
 import { updateProduct } from "../../redux/reducer/productReducer";
 import { exportToExcel } from "../../utils/export-excel";
 import axios from "../../apis/axios";
@@ -44,6 +44,14 @@ export default function ProductTable({
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [value, setValue] = useState("");
   const [saleProductSelected, setSaleProductSelected] = useState({});
+
+  const preProcessEditCellProps = (params) => {
+    console.log("params: ", params);
+
+    const v = Number(params.props.value);
+    const hasError = isNaN(v) || v < 0;
+    return { ...params.props, error: hasError };
+  };
 
   const handleOpenDialog = async (product) => {
     try {
@@ -134,6 +142,13 @@ export default function ProductTable({
       editable: true,
       align: "center",
       headerAlign: "center",
+      preProcessEditCellProps: (params) => {
+        const hasError = String(params.props.value).trim() === "";
+        console.log("hasError: ", hasError);
+        console.log(params);
+
+        return { ...params.props, error: hasError };
+      },
       renderCell: (params) => (
         <Box
           sx={{
@@ -154,8 +169,17 @@ export default function ProductTable({
       headerName: "Giá nhập kho",
       editable: true,
       width: 120,
+      type: "number",
       align: "center",
       headerAlign: "center",
+      // validate > 0
+      preProcessEditCellProps: preProcessEditCellProps,
+      valueFormatter: (params) => {
+        const v = params?.value;
+        if (v == null || v === "") {
+          return "";
+        }
+      },
       renderCell: (params) => (
         <Box
           sx={{
@@ -340,14 +364,6 @@ export default function ProductTable({
             <Button
               variant="contained"
               color="primary"
-              onClick={handleOpenAddUser}
-              sx={{ marginBottom: 2, marginRight: 2 }}
-            >
-              Thêm sản phẩm
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
               onClick={() => exportToExcel(rows)}
               sx={{ marginBottom: 2 }}
             >
@@ -384,6 +400,8 @@ export default function ProductTable({
           }}
           columns={getColumns()}
           processRowUpdate={handleRowUpdate}
+          editMode="cell"
+          experimentalFeatures={{ newEditingApi: true }}
           sx={{
             width: "100%",
             "& .MuiDataGrid-columnSeparator": { display: "none" },

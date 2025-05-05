@@ -11,7 +11,7 @@ export const createPost = createAsyncThunk(
       const data = {
         content: postData.content,
         images: postData.images,
-        hashtag: `#${postData.hashtag}`,
+        hashtag: postData.hashtag,
       };
 
       const response = await axios.post(`${API_URL}/create`, data);

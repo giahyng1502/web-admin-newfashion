@@ -11,25 +11,6 @@ const initialState = {
 const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {
-    getPosts: (state, action) => {
-      state.posts = action.payload;
-    },
-    addPost: (state, action) => {
-      state.posts.unshift(action.payload);
-    },
-    updateCurrentPost: (state, action) => {
-      const index = state.posts.findIndex(
-        (post) => post._id === action.payload._id
-      );
-      if (index !== -1) {
-        state.posts[index] = action.payload;
-      }
-    },
-    deleteCurrentPost: (state, action) => {
-      state.posts = state.posts.filter((post) => post._id !== action.payload);
-    },
-  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllPosts.pending, (state) => {
@@ -54,7 +35,10 @@ const postSlice = createSlice({
           (post) => post._id === action.payload._id
         );
         if (index !== -1) {
-          state.posts[index] = action.payload;
+          state.posts[index] = {
+            ...state.posts[index],
+            ...action.payload,
+          };
         }
       })
       .addCase(deletePost.fulfilled, (state, action) => {
@@ -64,6 +48,4 @@ const postSlice = createSlice({
   },
 });
 
-export const { getPosts, addPost, updateCurrentPost, deleteCurrentPost } =
-  postSlice.actions;
 export default postSlice.reducer;

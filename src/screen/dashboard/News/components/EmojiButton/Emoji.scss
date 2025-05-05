@@ -1,0 +1,28 @@
+$scroll-thumb-color: #aaa;
+$scroll-thumb-hover: #888;
+
+.emoji-mart-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: $scroll-thumb-color transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scroll-thumb-color;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: $scroll-thumb-hover;
+    }
+  }
+}
+
+.emoji-mart-category-label {
+  font-size: 14px;
+}

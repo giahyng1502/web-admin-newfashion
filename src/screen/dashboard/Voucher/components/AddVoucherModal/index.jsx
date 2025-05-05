@@ -8,9 +8,9 @@ import {
   Backdrop,
   Fade,
 } from "@mui/material";
-import { createVoucher } from "../../redux/voucher/voucherSlice";
+import { createVoucher } from "../../../../../redux/voucher/voucherSlice";
 import { useDispatch } from "react-redux";
-import { useNotify } from "../../hooks/useNotify";
+import { useNotify } from "../../../../../hooks/useNotify";
 
 const AddVoucherModal = ({ open, handleClose, onSuccess }) => {
   const [voucherData, setVoucherData] = useState({

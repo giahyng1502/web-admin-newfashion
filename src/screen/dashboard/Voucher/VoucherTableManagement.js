@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  InputBase,
-  Paper,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, IconButton, Paper, useTheme } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { VisibilityOutlined } from "@mui/icons-material";
@@ -15,10 +8,10 @@ import { exportToExcel } from "../../../utils/export-excel";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { removeVoucher } from "../../../redux/voucher/voucherSlice";
-import AddVoucherModal from "../../../components/AddVoucherModal";
-import UpdateVoucherModal from "../../../components/UpdateVoucherModal";
-import VoucherDetailModal from "../../../components/VoucherDetailModal";
 import { useNotify } from "../../../hooks/useNotify";
+import AddVoucherModal from "./components/AddVoucherModal";
+import UpdateVoucherModal from "./components/UpdateVoucherModal";
+import VoucherDetailModal from "./components/VoucherDetailModal";
 import "./styles.scss";
 
 export default function VoucherTableManagement({
@@ -37,7 +30,6 @@ export default function VoucherTableManagement({
   const [openUpdate, setOpenUpdate] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
-  const [value, setValue] = useState("");
   const { deleteSuccess } = useNotify();
 
   const dispatch = useDispatch();
@@ -180,8 +172,6 @@ export default function VoucherTableManagement({
             position: "relative",
             overflow: "visible",
             "& .action-container": {
-              position: "absolute",
-              right: 200,
               gap: 2,
               opacity: 0,
               transition: "opacity 0.2s ease-in-out",

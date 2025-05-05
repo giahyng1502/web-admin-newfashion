@@ -1,0 +1,50 @@
+.post-editor {
+  color: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: none;
+    margin-bottom: 8px;
+    gap: 6.5px;
+
+    &.visible {
+      display: flex;
+    }
+
+    .toolbar-btn {
+      min-width: 32px;
+      min-height: 32px;
+      background: transparent;
+      color: #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &.active {
+        background: #16202b;
+        color: #fff;
+      }
+    }
+  }
+
+  [contenteditable="true"] {
+    position: relative;
+    outline: none;
+    padding: 0 0 8px;
+    font-size: 17px;
+    min-height: 80px;
+    white-space: pre-wrap;
+  }
+
+  .slate-placeholder {
+    color: #aaa;
+    opacity: 0.6;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+}
