@@ -58,6 +58,7 @@ const StatisticsOrder = () => {
                 onChange={handleChangeOrderStat}
                 sx={{ mb: 3 }}
             >
+                <ToggleButton value="today">Ngày</ToggleButton>
                 <ToggleButton value="week">Tuần</ToggleButton>
                 <ToggleButton value="month">Tháng</ToggleButton>
                 <ToggleButton value="year">Năm</ToggleButton>
@@ -90,11 +91,18 @@ const StatisticsOrder = () => {
                                 <TableCell></TableCell>
                             </TableRow>
                             <TableRow>
+                                <TableCell>Đã xác nhận chờ giao hàng</TableCell>
+                                <TableCell>{orderStats.stats.confirmed}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
                                 <TableCell>Đơn đang giao</TableCell>
                                 <TableCell>{orderStats.stats.shipping}</TableCell>
                                 <TableCell></TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
+
                             <TableRow>
                                 <TableCell>Đã giao</TableCell>
                                 <TableCell>{orderStats.stats.delivered}</TableCell>
@@ -110,6 +118,12 @@ const StatisticsOrder = () => {
                             <TableRow>
                                 <TableCell>Hoàn trả</TableCell>
                                 <TableCell>{orderStats.stats.returned}</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Chưa thanh toán bằng hình thức momo</TableCell>
+                                <TableCell>{orderStats.stats.waitingPayment}</TableCell>
                                 <TableCell></TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
